@@ -1,3 +1,221 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegistroDeVacunacion</title>
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-image: url('fondo.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 25, 47, 0.65);
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 25px 40px;
+        }
+
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-grow: 1;
+        }
+
+        .profile-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .profile-btn.active, .profile-btn:hover {
+            color: #ffffff !important;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+            border-bottom: 3px solid #0d6efd;
+        }
+
+        .settings-icon {
+            color: #ffffff;
+            font-size: 2rem;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+
+        .center-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+            padding-bottom: 80px;
+        }
+
+        .custom-card {
+            background-color: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 35px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .text-card-white {
+            color: #ffffff !important;
+            text-align: center;
+        }
+
+        .mb-3 {
+            margin-bottom: 20px;
+        }
+
+        .mb-4 {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #0d6efd;
+            box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
+        }
+
+        .btn-submit:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-overlay"></div>
+    
+    <div class="content-wrapper">
+        <div class="top-navbar">
+            <button class="settings-icon" title="Ajustes">☰</button>
+            <div class="profile-container">
+                <button class="profile-btn active" id="btn-Master">Master</button>
+                <button class="profile-btn" id="btn-SubRegion">Sub-Region</button>
+                <button class="profile-btn" id="btn-CentroDeVacunacion">Centro de Vacunación</button>
+            </div>
+            <div style="width: 45px;"></div>
+        </div>
+
+        <div class="center-container">
+            <div class="custom-card">
+                <div class="text-card-white mb-4">
+                    <h2 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 8px;">Registro de Vacunación Nacional</h2>
+
+                </div>
+
+                <form id="login">
+                    <div class="mb-3">
+                        <label for="usuario" class="form-label">Usuario o Correo Electrónico</label>
+                        <input type="text" id="usuario" class="form-control" placeholder="Ingrese su usuario o correo electrónico" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="contraseña" class="form-label">Contraseña</label>
+                        <input type="password" id="contraseña" class="form-control" placeholder="Ingrese su contraseña" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Iniciar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const profileButtons = document.querySelectorAll('.profile-btn');
+    profileButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            profileButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
+=======
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,3 +227,4 @@
     <h1>Hola Cherry</h1>
 </body>
 </html>
+>>>>>>> 54af19fe4ee0885c00d78aeb8b0559a59ebc1722
