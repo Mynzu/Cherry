@@ -4,336 +4,476 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RegistroDeVacunacion</title>
-    <meta name="view-transition" content="same-origin">
+    <meta name="view-transition" content="same-origin"> 
+ 
     <style>
-        /* el * es para que afecte a la mayoria de etiquetas */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /*ps aqui es la fuente y los margenes para que cuadre con diseño de los navegadores web*/
-        }
-
-        body {
-            background-image: url('fondo.gif');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            overflow-y:auto;
-            /*el gif de fondo que coloque*/
-        }
-
-        .video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(10, 25, 47, 0.65);
-            z-index: 1;
-            /*esto es para que se vea mas oscurito, y todo, practicamente donde lo edito dentro de la pagina xd*/
-        }
-
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            /*es lo que contiene toda la pagina web, digamos que es muy amiga de los margenes de arriba*/
-        }
-
-        .top-navbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            padding: 25px 40px;
-            /*esto es para las trees barritas que le colocamos en la esquina*/
-        }
-
-        .profile-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-grow: 1;
-            /*para los botones del perfil*/
-        }
-
-        .profile-btn {
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1.3rem;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 5px 10px;
-            transition: all 0.3s ease;
-            /*mi parte fav, pero mas dificil de hacer, los botones de arriba*/
-        }
-
-        .profile-btn.active, .profile-btn:hover {
-            color: #ffffff !important;
-            text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-            border-bottom: 3px solid #0d6efd;
-            /*esto tambien va con lo de profile-btn, pero es que esto me frego la vida ps*/
-        }
-
-        .settings-icon {
-            color: #ffffff;
-            font-size: 2rem;
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            /*esto es para el icono de configuración de los trees barritas*/
-        }
-
-        .center-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            padding:10px 20px 30px 20px;
-            min-height: 0;
-            /*esto es lo que centra el login*/
-        }
-
-        .custom-card {
-            background-color: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px;
-            padding: 25px 30px;
-            width: 100%;
-            max-width: 360px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            /*esto es lit el diseño del login para que se vea asi difuminadito y esp*/
-        }
-
-        .d-none {
-            display: none !important;
-            /*para ocultar y mostrar las tarjetas de forma limpia*/
-        }
-
-        /* Estilos de la lista de estados */
-        .stats-list {
-            list-style: none;
-            color: white;
-            text-align: left;
-            max-height: 220px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            padding-right: 5px;
-        }
-
-        .stats-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.95rem;
-        }
-
-        .text-card-white {
-            color: #ffffff !important;
-            text-align: center;
-            /*afecta los textos dentro de la tarjeta y lee obliga a que ignore otra regla quee no sea esta*/
-        }
+    /* el * es para que afecte a la mayoria de etiquetas */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        /* ps aqui es la fuente y los margenes para que cuadre con diseño de los navegadores web */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
 
-        /*estos dos separaciones para que no se vea amontonado todo, tomar en cuwenta que esto es del framework*/
-        .mb-4 {
-            margin-bottom: 25px;
-        }
+    body {
+        /* el gif de fondo que coloque */
+        background-image: url('fondo.gif');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
 
-        .form-label {
-            display: block;
-            color: #ffffff;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            /*son las etiquetas de los campos de formulario para poder decir correo o nombre etc etfc*/
-        }
+    .video-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* esto es para que se vea mas oscurito, y todo, practicamente donde lo edito dentro de la pagina xd */
+        background-color: rgba(10, 25, 47, 0.65);
+        z-index: 1;
+    }
 
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s ease;
-            /*esto no se muy bien explicarlo, pero es dentro del globo blanco para que las personas al ingresar y eso tengan un tamaño estandar y todo*/
-        }
+    .content-wrapper {
+        position: relative;
+        z-index: 2;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        /* es lo que contiene toda la pagina web, digamos que es muy amiga de los margenes de arriba */
+    }
 
-        .form-control:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #0d6efd;
-            box-shadow: 0 0 10px rgba(13, 110, 253, 0.5);
-            /*es resaltar la caja con un borde azul brillante cuando el usuario hace clic adentro para empezar a escribir*/
-        }
 
-        .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-            /*las letras que si el ingrese su contraseña, la que se borra al escribirla*/
-        }
+    .top-navbar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 30px;
+        width: 100%;
+        padding: 25px 40px;
+        /* esto es para las trees barritas que le colocamos en la esquina */
+    }
 
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background-color: #0d6efd;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.4);
-            margin-bottom: 20px;
-            /*como dice el nombre es para ingresar al sistema es el que afecta el boton de iniciar sesion y todo lo que tenga que ver con eso*/
-        }
+    .settings-icon {
+        color: #ffffff;
+        font-size: 2rem;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+    }
 
-        .btn-submit:hover {
-            background-color: #0b5ed7;
-            transform: translateY(-2px);
-            /*es para que sea vea bien al tocar el boton azul de ingresar*/
-        }
+    .circle-container {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+        /* mi parte fav, pero mas dificil de hacer, los botones de arriba */
+    }
 
-        .register-redirect {
-            text-align: center;
-            color: #ffffff;
-            font-size: 0.9rem;
-            /*es para poner en curisiva lo de registrate uwu*/
-        }
+    .profile-circle {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        padding: 5px 2px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        /* esto tambien va con lo de profile-btn, pero es que esto me frego la vida ps */
+    }
 
-        .register-redirect a {
-            color: #6ea8fe;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s ease;
-            /*es el enlace para llevarlo al otro lugar a que se registre*/
-        }
+    .profile-circle.active, .profile-circle:hover {
+        color: #ffffff !important;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        border-bottom: 3px solid #0d6efd;
+        /* esto es para cuando pasas el mouse o dejas activo el boton, que brille y se ponga la rayita azul abajo */
+    }
 
-        .register-redirect a:hover {
-            color: #0d6efd;
-            text-decoration: underline;
-            /*es para que el enlace de registro se vea diferente al pasar el mouse por encima*/
-        }
+    .profile-circle:not(:last-child)::after {
+        content: "|";
+        color: rgba(255, 255, 255, 0.3);
+        margin-left: 25px;
+        display: inline-block;
+        pointer-events: none;
+        text-shadow: none;
+        /* el separador de palito "|" entre cada boton, para que no se peguen */
+    }
 
-        @media (max-width: 600px) {
-            /*esto es para que se adaprte a cualquier pantalla*/
-            .top-navbar {
+    .center-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        padding: 20px 40px 40px 40px;
+        /* esta caja es para centrar todo lo que va en el medio de la pantalla */
+    }
+
+    .main-dashboard {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 50px;
+        width: 100%;
+        max-width: 1050px;
+        align-items: center;
+         /* el panel principal donde se acomodan los cuadros de la pagina */ 
+    }
+
+    .dashboard-left {
+        flex: 1;
+        min-width: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;  
+        margin-top: -60px; 
+        /* el lado izquierdo, le puse el margen negativo para subirlo un poco y cuadre con el login */
+    }
+
+    .interactive-drawing-card {
+        background-color: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 20px;            
+        width: 100%;
+        max-width: 360px;         
+        text-align: center;
+        color: white;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        /* la tarjeta del certificado compacta para que no ocupe tanto espacio */
+    }
+
+    .dashboard-right {
+        flex: 1;
+        min-width: 380px;         
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;  
+        margin-top: -110px;       
+        /* subimos el login bastante para pegarlo mas a la barra de arriba */
+    }
+    .custom-card {
+        background-color: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 380px;
+        min-height: 440px;        
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+        /* tamaño fijo para que la tarjeta del login no se mueva feo al cambiar de perfil */
+    }
+
+    .dashboard-left {
+        flex: 1;
+        min-width: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;  
+        margin-top: -40px;        
+        /* subimos un poquito el certificado para que quede alineado con lo demas */
+    }
+
+    .custom-card {
+        background-color: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 380px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        
+        min-height: 380px; 
+        transition: min-height 0.3s ease-in-out; 
+        
+        display: flex;
+        flex-direction: column;
+        /* animacion fluida para cuando cambie de tamaño segun los datos */
+    }
+
+    #login {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: space-between; 
+        /* acomoda los inputs y botones limpios y bien distribuidos */
+    }
+
+
+    .text-card-white {
+        color: #ffffff !important;
+        text-align: center;
+        /* centramos el texto blanco de las tarjetas */
+    }
+
+    
+    .mb-3 { 
+        margin-bottom: 12px; 
+    } 
+    /*esto crea espacios de interliniado por asi decirlo*/
+    .mb-4 { 
+        margin-bottom: 16px; 
+    } 
+
+    .form-label {
+        display: block;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+        /* los textos de los titulos de cada input */
+    }
+    .form-control {
+        width: 100%;
+        padding: 10px 12px; 
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.07);
+        color: white;
+        font-size: 0.95rem;
+        outline: none;
+        /* estilo para las cajitas de texto donde el usuario escribe */
+    }
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #0d6efd;
+        /* para que cambie de color cuando el usuario hace clic para escribir */
+    }
+    .btn-submit {
+        width: 100%;
+        padding: 11px; 
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        /* el boton azul de enviar con su sombrita */
+    }
+    .btn-submit:hover {
+        background-color: #0b5ed7;
+        transform: translateY(-2px);
+        /* efecto para que el boton suba un poquito cuando le pasas el mouse */
+    }
+    .register-redirect {
+        text-align: center;
+        color: #ffffff;
+        font-size: 0.9rem;
+        /* el texto de abajo, la contraseña y eso*/
+    }
+
+    .register-redirect a:hover {
+        color: #0d6efd;
+        text-decoration: underline;
+        /* rayita abajo cuando pasas el mouse por el link */
+    }
+
+    .mb-3, .mb-4 {
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        /* los margenes con animacion para que no se mueva tosco */
+    }
+    .d-none {
+        display: none !important;
+        /* truco para ocultar cosas de la pantalla por completo */
+    }
+
+    @media (max-width: 768px) {
+        .top-navbar { 
             flex-direction: column; 
-            gap: 15px;
-            padding: 15px 20px;
-            }
-
-            .settings-icon {
-                align-self: flex-start;
-            }
-
-            /* se deben reacomodar las listas y el login que teniamos anteass*/
-            .profile-container {
-                flex-direction: column; /* cambia a lista vertical para que no se amontone de lado */
-                gap: 10px; 
-                width: 100%;
-                text-align: center;
-            }
-
-            .content-wrapper {
-                height: auto; /* permite que el contenido se ajuste al tamaño de la pantalla */
-                padding-bottom: 100px; /* agrega un poco de espacio inferior */
-            }
-
-            /* ajustamos el tamaño de las letras de los perfiles para celular, aqui le metemos a todo*/
-            .profile-btn {
-                font-size: 1.1rem;
-                padding: 5px 0;
-            }
-
-            /* esto es para que no se vea un desastre al ajustars*/
-            .top-navbar div[style*="width"] {
-                display: none !important;
-            }
-
-            /*y aqui afinamos detalles */
-            .custom-card {
-                padding: 25px 20px;
-                max-width: 320px;
-            }
+            align-items: flex-start;
+            gap: 15px; 
+            padding: 15px 20px; 
         }
+
+        .circle-container { 
+            flex-wrap: wrap; 
+        }
+
+        .center-container { 
+            padding: 10px 20px 40px 20px; 
+            margin-top: 0; 
+        }
+
+        .main-dashboard { 
+            flex-direction: column; 
+            gap: 35px; 
+        }
+
+        .custom-card { 
+            max-width: 100%; 
+        }
+        /* aca acomodamos todo para que en telefonos se vea en vertical y no se rompa el diseño */
+    }
     </style>
 </head>
+
 <body>
     <div class="video-overlay"></div>
+    <!--la capa oscura para que el fondo gif no canse la vista-->
     
     <div class="content-wrapper">
         <div class="top-navbar">
             <button class="settings-icon" title="Ajustes">☰</button>
-            <div class="profile-container">
-                <button class="profile-btn active" id="btn-Master">Master</button>
-                <button class="profile-btn" id="btn-SubRegion">Sub-Region</button>
-                <button class="profile-btn" id="btn-CentroDeVacunacion">Centro de Vacunación</button>
+            
+            <div class="circle-container">
+                <button type="button" class="profile-circle active" data-profile="master">Master</button>
+                <button type="button" class="profile-circle" data-profile="subregion">Sub-Region</button>
+                <button type="button" class="profile-circle" data-profile="centro">Centro Vacunación</button>
             </div>
-            <div style="width: 45px;"></div>
+            <!--las tres barritas de la esquina y los botones de los perfiles juntos en la misma linea-->
         </div>
 
         <div class="center-container">
-            <div class="custom-card">
-                <div class="text-card-white mb-4">
-                    <h2 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 8px;">Registro de Vacunación Nacional</h2>
+            <div class="main-dashboard">
+                
+                <div class="center-container">
+                    <div class="main-dashboard">
+                        
+                        <div class="dashboard-left">
+                            <div class="interactive-drawing-card">
+                                <h4 style="margin-bottom: 6px; font-size: 1.1rem; font-weight: 700;">¿Buscas tu Certificado?</h4>
+                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-bottom: 15px;">¡¡Accede como ciudadano y descarga tu registro de Vacunacion!!</p>
+                                <a href="consulta.html" class="btn-submit" style="display: inline-block; text-decoration: none; width: auto; padding: 8px 20px; font-size: 0.95rem; margin-bottom: 0;">Accede a tu Registro</a>
+                            </div>
+                            <!--el cuadro del certificado para que la gente descargue su registro rapido -->
+                        </div>
+
+                        <div class="dashboard-right">
+                            <div class="custom-card">
+                                <div class="text-card-white mb-4">
+                                    <h2 id="login-title" style="font-size: 1.6rem; font-weight: 700;">Master</h2>
+                                </div>
+
+                                <form id="login">
+                                    <div class="mb-3" id="group-usuario">
+                                        <label for="usuario" class="form-label" id="label-usuario">Usuario Administrador</label>
+                                        <input type="text" id="usuario" class="form-control" placeholder="Ingrese código Master" required>
+                                    </div>
+
+                                    <div class="mb-3 d-none" id="group-region">
+                                        <label for="region" class="form-label">Código Regional</label>
+                                        <input type="text" id="region" class="form-control" placeholder="Ej: REG-ARAGUA">
+                                    </div>
+
+                                    <div class="mb-3 d-none" id="group-centro">
+                                        <label for="centro" class="form-label">ID del Centro Médico</label>
+                                        <input type="text" id="centro" class="form-control" placeholder="Ej: HOSP-021">
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="contraseña" class="form-label">Contraseña</label>
+                                        <input type="password" id="contraseña" class="form-control" placeholder="Ingrese su contraseña" required>
+                                    </div>
+
+                                    <button type="submit" class="btn-submit">Iniciar Sesión</button>
+
+                                    <div class="register-redirect">
+                                        <a href="#" style="color: #ff6b6b; font-weight: 600;">¿Olvidaste tu contraseña?</a>
+                                    </div>
+                                    <!--el formulario completo con los campos que se muestran u ocultan segun el boton de arriba-->
+                                </form>
+                            </div>
+                            <!--la tarjeta del login bien acomodada a la derecha-->
+                        </div>
+
+                    </div>
                 </div>
-
-                <form id="login">
-                    <div class="mb-3">
-                        <label for="usuario" class="form-label">Usuario o Correo Electrónico</label>
-                        <input type="text" id="usuario" class="form-control" placeholder="Ingrese su usuario o correo electrónico" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="cedula" class="form-label">Cédula de Identidad</label>
-                        <input type="text" id="cedula" class="form-control" placeholder="Ej: V-12345678" required>
-                    </div>
-                    
-                    <div class="mb-4">
-                        <label for="contraseña" class="form-label">Contraseña</label>
-                        <input type="password" id="contraseña" class="form-control" placeholder="Ingrese su contraseña" required>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Iniciar Sesión</button>
-
-                    <div class="register-redirect mb-3">
-                        ¿No tienes una cuenta? <a href="registro.html" id="link-registro">Regístrate aquí</a>
-                    </div>
-
-                    <div class="register-redirect">
-                        <!-- El enlace redirige a la otra página creada dxe los usuarios -->
-                        <a href="consulta.html" id="link-ver-estados" style="color: #a6c8ff;">Ver Estados de Vacunación</a>
-                    </div>
-                </form>
+                <!--la caja central que encierra el dashboard y las dos columnas-->
             </div>
         </div>
     </div>
 
-<script>
-    const profileButtons = document.querySelectorAll('.profile-btn');
-    profileButtons.forEach(button => {
-        button.addEventListener('click', () => {
-                profileButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-        });
-    });
+    <script>
+        // el menu de arriba
+        const circles = document.querySelectorAll('.profile-circle');
+        const loginTitle = document.getElementById('login-title');
+        const labelUsuario = document.getElementById('label-usuario');
+        const inputUsuario = document.getElementById('usuario');
+        
+        const groupRegion = document.getElementById('group-region');
+        const groupCentro = document.getElementById('group-centro');
+        const inputRegion = document.getElementById('region');
+        const inputCentro = document.getElementById('centro');
 
-    const settingsBtn = document.querySelector('.settings-icon');
-    settingsBtn.addEventListener('click', () => {
-        alert("boton de ajustes,  que me falta hacer xd");
-    });
-</script>
+        circles.forEach(circle => {
+            circle.addEventListener('click', () => {
+                circles.forEach(c => c.classList.remove('active'));
+                circle.classList.add('active');
+
+                const profile = circle.getAttribute('data-profile');
+                const card = document.querySelector('.custom-card'); 
+
+                if (profile === 'master') {
+                    loginTitle.innerText = "Iniciar Sesión: Master";
+                    labelUsuario.innerText = "Usuario Administrador";
+                    inputUsuario.placeholder = "Ingrese código Master";
+                    
+                    groupRegion.classList.add('d-none');
+                    groupCentro.classList.add('d-none');
+                    inputRegion.removeAttribute('required');
+                    inputCentro.removeAttribute('required');
+                    
+                    card.style.minHeight = "380px"; 
+                    /* si toca Master, borramos los campos demas, quitamos que sean obligatorios y encogemos la tarjeta */
+                } 
+                else if (profile === 'subregion') {
+                    loginTitle.innerText = "Acceso: Sub-Region";
+                    labelUsuario.innerText = "Usuario Regional";
+                    inputUsuario.placeholder = "Ingrese usuario de sub-región";
+                    
+                    groupRegion.classList.remove('d-none');
+                    groupCentro.classList.add('d-none');
+                    inputRegion.setAttribute('required', 'true');
+                    inputCentro.removeAttribute('required');
+                    
+                    card.style.minHeight = "460px"; 
+                    /* si toca Sub-Region, mostramos el campo de la region, lo hacemos obligatorio y agrandamos la tarjeta */
+                } 
+                else if (profile === 'centro') {
+                    loginTitle.innerText = "Acceso: Centro Médico";
+                    labelUsuario.innerText = "Usuario del Centro";
+                    inputUsuario.placeholder = "Ingrese usuario de enfermería";
+                    
+                    groupRegion.classList.add('d-none');
+                    groupCentro.classList.remove('d-none');
+                    inputRegion.removeAttribute('required');
+                    inputCentro.setAttribute('required', 'true');
+                    
+                    card.style.minHeight = "460px"; 
+                    /* si toca Centro, ocultamos region, mostramos el ID del centro como obligatorio y mantenemos el tamaño grande */
+                }
+            });
+        });
+        /* este ciclo es el que revisa a cual boton de arriba le van a dar clic para cambiar los textos y tamaños del login */
+
+        // Configuración del botón de ajustes ☰
+        const settingsBtn = document.querySelector('.settings-icon');
+        settingsBtn.addEventListener('click', () => {
+            alert("El botón de Ajustes, que aun no hago xdd");
+        });
+    </script>
 </body>
 </html>
