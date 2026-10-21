@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Evaluación - Sub-Región</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+                        url('fondo3.AVIF') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-brand {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-brand span {
+            opacity: 0.6;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-brand span.active {
+            opacity: 1;
+            color: #38bdf8;
+            border-bottom: 2px solid #38bdf8;
+            padding-bottom: 4px;
+        }
+
+        .user-info {
+            font-size: 14px;
+            opacity: 0.85;
+        }
+
+        /* Container */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .dashboard-card {
+            background: rgba(23, 30, 43, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 850px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 12px;
+            color: #f8fafc;
+        }
+
+        /* Selector de Simulación de Prueba */
+        .demo-controls {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px dashed rgba(56, 189, 248, 0.4);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .demo-controls select {
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 6px;
+            outline: none;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #38bdf8;
+            margin: 20px 0 12px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .btn-search {
+            padding: 0 24px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-search:hover { background: #2563eb; }
+
+        /* Patient Info Banner */
+        .patient-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #38bdf8;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none; /* Se activa al buscar */
+        }
+
+        /* Exam Cards Grid */
+        .exams-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .exam-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 14px;
+            transition: 0.3s;
+        }
+
+        .exam-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .exam-header input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #38bdf8;
+        }
+
+        .exam-details {
+            margin-top: 12px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.15);
+        }
+
+        .exam-details input {
+            padding: 8px 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 12px;
+        }
+
+        /* Action Button */
+        .btn-process {
+            width: 100%;
+            padding: 15px;
+            background: #2563eb;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-process:hover { background: #1d4ed8; }
+
+        /* Alerts */
+        .alert-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid #22c55e;
+            color: #86efac;
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        .missing-list {
+            margin-top: 8px;
+            padding-left: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-brand">
+            <span>Master</span>
+            <span class="active">Sub-Región (Evaluación)</span>
+            <span>Centro Vacunación</span>
+        </div>
+        <div class="user-info">
+            Evaluador: <strong>Dr. Daniel Franco</strong> | <a href="index.html" style="color: #38bdf8; text-decoration: none; margin-left: 10px;">Cerrar Sesión</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="dashboard-card">
+            <h2 style="text-align: center;">Evaluación y Verificación de Salud</h2>
+
+            <!-- Controles de Prueba Visual (Modo Simulación) -->
+            <div class="demo-controls">
+                <span>⚙️ <strong>Modo de Simulación:</strong></span>
+                <select id="simulacionBD">
+                    <option value="completo">Paciente con vacunas al día</option>
+                    <option value="incompleto">Paciente con vacunas faltantes</option>
+                </select>
+            </div>
+            
+            <!-- Buscador -->
+            <div class="search-box">
+                <input type="text" id="cedulaInput" placeholder="Ingrese Cédula del Ciudadano (Ej: V-26543210)">
+                <button class="btn-search" onclick="buscarPaciente()">Buscar Paciente</button>
+            </div>
+
+            <!-- Ficha del Paciente (Se muestra al buscar) -->
+            <div id="patientCard" class="patient-card">
+                <strong>Paciente:</strong> <span id="nombrePaciente">María Rodríguez</span> | 
+                <strong>Cédula:</strong> <span id="cedulaPaciente">V-26.543.210</span> | 
+                <strong>Estado en el sistema:</strong> <span id="estadoVacunasBD" style="color: #38bdf8; font-weight: bold;">Verificado</span>
+            </div>
+
+            <!-- Validación de Exámenes por el Doctor -->
+            <div class="section-title" style="text-align: center;"> Validación de Exámenes y Médicos Emisores</div>
+            <div class="exams-grid">
+                
+                <!-- Examen 1 -->
+                <div class="exam-card">
+                    <label class="exam-header">
+                        <input type="checkbox" id="checkLab" onchange="toggleDetails('detailsLab', this.checked)">
+                        Laboratorio (VDRL / Heces)
+                    </label>
+                    <div class="exam-details" id="detailsLab">
+                        <input type="text" placeholder="Médico / Bioanalista Emisor">
+                        <input type="text" placeholder="N° Colegiado / Licencia">
+                    </div>
+                </div>
+
+                <!-- Examen 2 -->
+                <div class="exam-card">
+                    <label class="exam-header">
+                        <input type="checkbox" id="checkTorax" onchange="toggleDetails('detailsTorax', this.checked)">
+                        Rayos X de Tórax
+                    </label>
+                    <div class="exam-details" id="detailsTorax">
+                        <input type="text" placeholder="Radiólogo Emisor">
+                        <input type="text" placeholder="N° Colegiado / MSDS">
+                    </div>
+                </div>
+
+                <!-- Examen 3 -->
+                <div class="exam-card">
+                    <label class="exam-header">
+                        <input type="checkbox" id="checkOdonto" onchange="toggleDetails('detailsOdonto', this.checked)">
+                        Evaluación Odontológica
+                    </label>
+                    <div class="exam-details" id="detailsOdonto">
+                        <input type="text" placeholder="Odontólogo Emisor">
+                        <input type="text" placeholder="N° Colegiado Odontológico">
+                    </div>
+                </div>
+
+                <!-- Examen 4 -->
+                <div class="exam-card">
+                    <label class="exam-header">
+                        <input type="checkbox" id="checkFisico" onchange="toggleDetails('detailsFisico', this.checked)">
+                        Examen Físico General
+                    </label>
+                    <div class="exam-details" id="detailsFisico">
+                        <input type="text" placeholder="Médico Examinador">
+                        <input type="text" placeholder="N° Matrícula Sanitaria">
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Botón Procesar -->
+            <button class="btn-process" onclick="procesarSolicitud()">Procesar Certificado de Salud</button>
+
+            <!-- Alertas Visuales -->
+            <div id="alertSuccess" class="alert-box alert-success">
+                ✅ <strong>¡Certificado Aprobado y Generado!</strong><br>
+                El sistema verificó que el paciente posee todas sus vacunas al día. Los exámenes fueron validados con éxito y el certificado oficial ha sido enviado al correo electrónico del ciudadano.
+            </div>
+
+            <div id="alertDanger" class="alert-box alert-danger">
+                🚫 <strong>Solicitud Rechazada por Esquema Incompleto:</strong><br>
+                 El sistema detectó que el paciente no posee su esquema de inmunización al día. No se puede emitir el certificado de salud.<br><br>
+                <strong>Vacunas Pendientes Registradas:</strong>
+                <ul id="listaFaltantes" class="missing-list">
+                    <li>Fiebre Amarilla (Dosis Única)</li>
+                    <li>Toxoide Tetánico (Refuerzo)</li>
+                </ul>
+                <br>
+                📧 <em>Se ha enviado automáticamente una notificación al correo del ciudadano indicándole que debe acudir al Centro de Salud más cercano a colocarse las vacunas faltantes.</em>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Muestra los datos del paciente al hacer clic en Buscar
+        function buscarPaciente() {
+            const cedula = document.getElementById('cedulaInput').value.trim();
+            const patientCard = document.getElementById('patientCard');
+            const cedulaPaciente = document.getElementById('cedulaPaciente');
+            
+            if(cedula !== "") {
+                cedulaPaciente.textContent = cedula;
+                patientCard.style.display = 'block';
+                // Ocultar alertas previas al hacer nueva búsqueda
+                document.getElementById('alertSuccess').style.display = 'none';
+                document.getElementById('alertDanger').style.display = 'none';
+            } else {
+                alert("Por favor, ingrese un número de cédula.");
+            }
+        }
+
+        // Muestra u oculta credenciales médicas
+        function toggleDetails(id, isChecked) {
+            const el = document.getElementById(id);
+            el.style.display = isChecked ? 'flex' : 'none';
+        }
+
+        // Procesa la validación automática
+        function procesarSolicitud() {
+            const simulación = document.getElementById('simulacionBD').value;
+            const alertSuccess = document.getElementById('alertSuccess');
+            const alertDanger = document.getElementById('alertDanger');
+
+            alertSuccess.style.display = 'none';
+            alertDanger.style.display = 'none';
+
+            if (simulación === 'completo') {
+                // El sistema verifica que las vacunas están al día en la BD
+                alertSuccess.style.display = 'block';
+            } else {
+                // El sistema detecta automáticamente en la BD que le faltan vacunas
+                alertDanger.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
