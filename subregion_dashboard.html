@@ -14,7 +14,7 @@
 
         body {
             background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
-                        url('fondo3.AVIF') no-repeat center center fixed;
+                        url('Fondo3.avif') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
             min-height: 100vh;
@@ -74,7 +74,7 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 16px;
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             padding: 35px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
@@ -87,7 +87,7 @@
             color: #f8fafc;
         }
 
-        /* Selector de Simulación de Prueba */
+        /* Controls */
         .demo-controls {
             background: rgba(56, 189, 248, 0.1);
             border: 1px dashed rgba(56, 189, 248, 0.4);
@@ -150,7 +150,7 @@
 
         .btn-search:hover { background: #2563eb; }
 
-        /* Patient Info Banner */
+        /* Patient Card */
         .patient-card {
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid #38bdf8;
@@ -158,10 +158,10 @@
             border-radius: 6px;
             margin-bottom: 20px;
             font-size: 14px;
-            display: none; /* Se activa al buscar */
+            display: none;
         }
 
-        /* Exam Cards Grid */
+        /* Exams Grid */
         .exams-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -173,7 +173,7 @@
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            padding: 14px;
+            padding: 16px;
             transition: 0.3s;
         }
 
@@ -181,7 +181,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            cursor: pointer;
             font-size: 14px;
             font-weight: 600;
         }
@@ -190,6 +189,28 @@
             width: 18px;
             height: 18px;
             accent-color: #38bdf8;
+            cursor: pointer;
+        }
+
+        .exam-title-text {
+            flex: 1;
+        }
+
+        .status-select {
+            background: rgba(15, 23, 42, 0.9);
+            color: #22c55e;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            font-weight: bold;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .status-select.no-apto {
+            color: #ef4444;
+            border-color: #ef4444;
         }
 
         .exam-details {
@@ -201,13 +222,38 @@
             border-top: 1px dashed rgba(255, 255, 255, 0.15);
         }
 
-        .exam-details input {
+        .exam-details input, .exam-details textarea {
             padding: 8px 10px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 6px;
             color: #e2e8f0;
             font-size: 12px;
+            outline: none;
+        }
+
+        .obs-container {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 4px;
+            background: rgba(239, 68, 68, 0.08);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .obs-container label {
+            font-size: 11px;
+            color: #fca5a5;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .obs-container textarea {
+            resize: vertical;
+            min-height: 50px;
+            border-color: rgba(239, 68, 68, 0.4);
         }
 
         /* Action Button */
@@ -230,11 +276,17 @@
         /* Alerts */
         .alert-box {
             margin-top: 20px;
-            padding: 16px;
+            padding: 20px;
             border-radius: 10px;
             font-size: 14px;
             display: none;
-            line-height: 1.5;
+            line-height: 1.6;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid #f59e0b;
+            color: #fcd34d;
         }
 
         .alert-success {
@@ -249,10 +301,34 @@
             color: #fca5a5;
         }
 
-        .missing-list {
-            margin-top: 8px;
+        .rejection-section {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(239, 68, 68, 0.4);
+        }
+
+        .rejection-section h4 {
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .rejection-list {
             padding-left: 20px;
-            font-weight: 600;
+        }
+
+        .rejection-item {
+            margin-bottom: 6px;
+        }
+
+        .rejection-item strong {
+            color: #ffffff;
+        }
+
+        .rejection-item em {
+            display: block;
+            font-size: 13px;
+            color: #fca5a5;
         }
     </style>
 </head>
@@ -270,12 +346,12 @@
     </header>
 
     <main>
-        <div class="dashboard-card">
-            <h2 style="text-align: center;">Evaluación y Verificación de Salud</h2>
+        <div class="dashboard-card"style="text-align: center;">
+            <h2>Evaluación y Verificación Sanitaria</h2>
 
-            <!-- Controles de Prueba Visual (Modo Simulación) -->
+            <!-- Modo Simulación -->
             <div class="demo-controls">
-                <span>⚙️ <strong>Modo de Simulación:</strong></span>
+                <span>⚙️ <strong>Modo Simulación (Estado de Vacunas):</strong></span>
                 <select id="simulacionBD">
                     <option value="completo">Paciente con vacunas al día</option>
                     <option value="incompleto">Paciente con vacunas faltantes</option>
@@ -288,62 +364,98 @@
                 <button class="btn-search" onclick="buscarPaciente()">Buscar Paciente</button>
             </div>
 
-            <!-- Ficha del Paciente (Se muestra al buscar) -->
+            <!-- Ficha del Paciente -->
             <div id="patientCard" class="patient-card">
                 <strong>Paciente:</strong> <span id="nombrePaciente">María Rodríguez</span> | 
                 <strong>Cédula:</strong> <span id="cedulaPaciente">V-26.543.210</span> | 
                 <strong>Estado en el sistema:</strong> <span id="estadoVacunasBD" style="color: #38bdf8; font-weight: bold;">Verificado</span>
             </div>
 
-            <!-- Validación de Exámenes por el Doctor -->
-            <div class="section-title" style="text-align: center;"> Validación de Exámenes y Médicos Emisores</div>
+            <!-- Exámenes Médicos con Evaluación de Aptitud -->
+            <div class="section-title"style="text-align: center;">Validación de Exámenes y Evaluación Médica</div>
             <div class="exams-grid">
                 
                 <!-- Examen 1 -->
                 <div class="exam-card">
-                    <label class="exam-header">
-                        <input type="checkbox" id="checkLab" onchange="toggleDetails('detailsLab', this.checked)">
-                        Laboratorio (VDRL / Heces)
-                    </label>
+                    <div class="exam-header">
+                        <input type="checkbox" id="checkLab" class="exam-checkbox" onchange="toggleDetails('detailsLab', this.checked)">
+                        <span class="exam-title-text">Laboratorio (VDRL / Heces)</span>
+                        <select class="status-select" id="statusLab" onchange="actualizarAptitud('statusLab', 'obsContainerLab')">
+                            <option value="apto">Apto</option>
+                            <option value="no_apto">No Apto</option>
+                        </select>
+                    </div>
                     <div class="exam-details" id="detailsLab">
-                        <input type="text" placeholder="Médico / Bioanalista Emisor">
-                        <input type="text" placeholder="N° Colegiado / Licencia">
+                        <input type="text" id="emisorLab" placeholder="Médico / Bioanalista Emisor *">
+                        <input type="text" id="colegiadoLab" placeholder="N° Colegiado / Licencia *">
+                        
+                        <div class="obs-container" id="obsContainerLab">
+                            <label>⚠️ Observación Médica (Motivo de No Aptitud):</label>
+                            <textarea id="obsLab" placeholder="Escriba aquí la razón detallada por la cual el examen no es apto..."></textarea>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Examen 2 -->
                 <div class="exam-card">
-                    <label class="exam-header">
-                        <input type="checkbox" id="checkTorax" onchange="toggleDetails('detailsTorax', this.checked)">
-                        Rayos X de Tórax
-                    </label>
+                    <div class="exam-header">
+                        <input type="checkbox" id="checkTorax" class="exam-checkbox" onchange="toggleDetails('detailsTorax', this.checked)">
+                        <span class="exam-title-text">Rayos X de Tórax</span>
+                        <select class="status-select" id="statusTorax" onchange="actualizarAptitud('statusTorax', 'obsContainerTorax')">
+                            <option value="apto">Apto</option>
+                            <option value="no_apto">No Apto</option>
+                        </select>
+                    </div>
                     <div class="exam-details" id="detailsTorax">
-                        <input type="text" placeholder="Radiólogo Emisor">
-                        <input type="text" placeholder="N° Colegiado / MSDS">
+                        <input type="text" id="emisorTorax" placeholder="Radiólogo Emisor *">
+                        <input type="text" id="colegiadoTorax" placeholder="N° Colegiado / MSDS *">
+
+                        <div class="obs-container" id="obsContainerTorax">
+                            <label>⚠️ Observación Médica (Motivo de No Aptitud):</label>
+                            <textarea id="obsTorax" placeholder="Escriba el motivo..."></textarea>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Examen 3 -->
                 <div class="exam-card">
-                    <label class="exam-header">
-                        <input type="checkbox" id="checkOdonto" onchange="toggleDetails('detailsOdonto', this.checked)">
-                        Evaluación Odontológica
-                    </label>
+                    <div class="exam-header">
+                        <input type="checkbox" id="checkOdonto" class="exam-checkbox" onchange="toggleDetails('detailsOdonto', this.checked)">
+                        <span class="exam-title-text">Evaluación Odontológica</span>
+                        <select class="status-select" id="statusOdonto" onchange="actualizarAptitud('statusOdonto', 'obsContainerOdonto')">
+                            <option value="apto">Apto</option>
+                            <option value="no_apto">No Apto</option>
+                        </select>
+                    </div>
                     <div class="exam-details" id="detailsOdonto">
-                        <input type="text" placeholder="Odontólogo Emisor">
-                        <input type="text" placeholder="N° Colegiado Odontológico">
+                        <input type="text" id="emisorOdonto" placeholder="Odontólogo Emisor *">
+                        <input type="text" id="colegiadoOdonto" placeholder="N° Colegiado Odontológico *">
+
+                        <div class="obs-container" id="obsContainerOdonto">
+                            <label>⚠️ Observación Médica (Motivo de No Aptitud):</label>
+                            <textarea id="obsOdonto" placeholder="Escriba el motivo..."></textarea>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Examen 4 -->
                 <div class="exam-card">
-                    <label class="exam-header">
-                        <input type="checkbox" id="checkFisico" onchange="toggleDetails('detailsFisico', this.checked)">
-                        Examen Físico General
-                    </label>
+                    <div class="exam-header">
+                        <input type="checkbox" id="checkFisico" class="exam-checkbox" onchange="toggleDetails('detailsFisico', this.checked)">
+                        <span class="exam-title-text">Examen Físico General</span>
+                        <select class="status-select" id="statusFisico" onchange="actualizarAptitud('statusFisico', 'obsContainerFisico')">
+                            <option value="apto">Apto</option>
+                            <option value="no_apto">No Apto</option>
+                        </select>
+                    </div>
                     <div class="exam-details" id="detailsFisico">
-                        <input type="text" placeholder="Médico Examinador">
-                        <input type="text" placeholder="N° Matrícula Sanitaria">
+                        <input type="text" id="emisorFisico" placeholder="Médico Examinador *">
+                        <input type="text" id="colegiadoFisico" placeholder="N° Matrícula Sanitaria *">
+
+                        <div class="obs-container" id="obsContainerFisico">
+                            <label>⚠️ Observación Médica (Motivo de No Aptitud):</label>
+                            <textarea id="obsFisico" placeholder="Escriba el motivo..."></textarea>
+                        </div>
                     </div>
                 </div>
 
@@ -352,29 +464,54 @@
             <!-- Botón Procesar -->
             <button class="btn-process" onclick="procesarSolicitud()">Procesar Certificado de Salud</button>
 
-            <!-- Alertas Visuales -->
-            <div id="alertSuccess" class="alert-box alert-success">
-                ✅ <strong>¡Certificado Aprobado y Generado!</strong><br>
-                El sistema verificó que el paciente posee todas sus vacunas al día. Los exámenes fueron validados con éxito y el certificado oficial ha sido enviado al correo electrónico del ciudadano.
+            <!-- Alerta Validación Incompleta (Exámenes sin marcar) -->
+            <div id="alertIncomplete" class="alert-box alert-warning">
+                ⚠️ <strong>Revisión Incompleta:</strong> Debe verificar y marcar las casillas correspondientes a los 4 exámenes médicos requeridos antes de poder procesar la solicitud.
             </div>
 
-            <div id="alertDanger" class="alert-box alert-danger">
-                🚫 <strong>Solicitud Rechazada por Esquema Incompleto:</strong><br>
-                 El sistema detectó que el paciente no posee su esquema de inmunización al día. No se puede emitir el certificado de salud.<br><br>
-                <strong>Vacunas Pendientes Registradas:</strong>
-                <ul id="listaFaltantes" class="missing-list">
-                    <li>Fiebre Amarilla (Dosis Única)</li>
-                    <li>Toxoide Tetánico (Refuerzo)</li>
-                </ul>
-                <br>
-                📧 <em>Se ha enviado automáticamente una notificación al correo del ciudadano indicándole que debe acudir al Centro de Salud más cercano a colocarse las vacunas faltantes.</em>
+            <!-- Alerta Datos del Doctor Incompletos (Prevención Exámenes Fantasma) -->
+            <div id="alertDoctorData" class="alert-box alert-warning">
+                ⚠️ <strong>Datos Profesionales Incompletos (Antifraude):</strong><br>
+                Para evitar el registro de exámenes sin respaldo legal o "exámenes fantasma", debe ingresar obligatoriamente el <strong>Nombre del Especialista Emisor</strong> y su <strong>N° de Colegiado/Matrícula</strong> en los exámenes seleccionados:
+                <ul id="listaExamenesSinDatos" style="margin-top: 8px; padding-left: 20px; font-weight: bold;"></ul>
+            </div>
+
+            <!-- Alerta Éxito -->
+            <div id="alertSuccess" class="alert-box alert-success">
+                ✅ <strong>¡Certificado Aprobado y Generado!</strong><br>
+                El paciente fue diagnosticado como <strong>APTO</strong> en la totalidad de sus exámenes clínicos y posee su esquema de vacunación al día en el sistema. El certificado ha sido enviado a su correo electrónico.
+            </div>
+
+            <!-- Alerta Unificada de Rechazo (Exámenes + Vacunas) -->
+            <div id="alertGlobalDanger" class="alert-box alert-danger">
+                🚫 <strong>Solicitud de Certificado de Salud Rechazada</strong><br>
+                El sistema no pudo procesar la emisión del certificado de salud debido a los siguientes motivos registrados:
+
+                <!-- Bloque Exámenes No Aptos -->
+                <div id="sectionExamRejection" class="rejection-section" style="display: none;">
+                    <h4>📋 Exámenes Físicos Diagnosticados como NO APTO:</h4>
+                    <ul id="listaRechazosExamenes" class="rejection-list"></ul>
+                </div>
+
+                <!-- Bloque Vacunas Faltantes -->
+                <div id="sectionVaccineRejection" class="rejection-section" style="display: none;">
+                    <h4>💉 Esquema de Inmunización Pendiente en BD:</h4>
+                    <ul class="rejection-list">
+                        <li class="rejection-item">• Fiebre Amarilla (Dosis Única)</li>
+                        <li class="rejection-item">• Toxoide Tetánico (Refuerzo)</li>
+                    </ul>
+                </div>
+
+                <div style="margin-top: 15px; font-style: italic; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px;">
+                    📧 <strong>Notificación por Correo Enviada al Paciente:</strong><br>
+                    "Estimado ciudadano, su solicitud de Certificado de Salud fue RECHAZADA. Se le solicita solventar las observaciones médicas y/o dirigirse al centro de salud más cercano para colocarse las vacunas y/o solventar los examenes indicados."
+                </div>
             </div>
 
         </div>
     </main>
 
     <script>
-        // Muestra los datos del paciente al hacer clic en Buscar
         function buscarPaciente() {
             const cedula = document.getElementById('cedulaInput').value.trim();
             const patientCard = document.getElementById('patientCard');
@@ -383,35 +520,135 @@
             if(cedula !== "") {
                 cedulaPaciente.textContent = cedula;
                 patientCard.style.display = 'block';
-                // Ocultar alertas previas al hacer nueva búsqueda
-                document.getElementById('alertSuccess').style.display = 'none';
-                document.getElementById('alertDanger').style.display = 'none';
+                ocultarAlertas();
             } else {
                 alert("Por favor, ingrese un número de cédula.");
             }
         }
 
-        // Muestra u oculta credenciales médicas
         function toggleDetails(id, isChecked) {
             const el = document.getElementById(id);
             el.style.display = isChecked ? 'flex' : 'none';
         }
 
-        // Procesa la validación automática
-        function procesarSolicitud() {
-            const simulación = document.getElementById('simulacionBD').value;
-            const alertSuccess = document.getElementById('alertSuccess');
-            const alertDanger = document.getElementById('alertDanger');
+        function actualizarAptitud(selectId, obsContainerId) {
+            const selectEl = document.getElementById(selectId);
+            const obsContainer = document.getElementById(obsContainerId);
 
-            alertSuccess.style.display = 'none';
-            alertDanger.style.display = 'none';
-
-            if (simulación === 'completo') {
-                // El sistema verifica que las vacunas están al día en la BD
-                alertSuccess.style.display = 'block';
+            if (selectEl.value === 'no_apto') {
+                selectEl.classList.add('no-apto');
+                obsContainer.style.display = 'flex';
             } else {
-                // El sistema detecta automáticamente en la BD que le faltan vacunas
-                alertDanger.style.display = 'block';
+                selectEl.classList.remove('no-apto');
+                obsContainer.style.display = 'none';
+            }
+        }
+
+        function ocultarAlertas() {
+            document.getElementById('alertIncomplete').style.display = 'none';
+            document.getElementById('alertDoctorData').style.display = 'none';
+            document.getElementById('alertSuccess').style.display = 'none';
+            document.getElementById('alertGlobalDanger').style.display = 'none';
+        }
+
+        function procesarSolicitud() {
+            ocultarAlertas();
+
+            // Configuración de los 4 exámenes y sus campos de credenciales
+            const examenes = [
+                { id: 'checkLab', emisorId: 'emisorLab', colegiadoId: 'colegiadoLab', statusId: 'statusLab', obsId: 'obsLab', nombre: 'Laboratorio (VDRL / Heces)' },
+                { id: 'checkTorax', emisorId: 'emisorTorax', colegiadoId: 'colegiadoTorax', statusId: 'statusTorax', obsId: 'obsTorax', nombre: 'Rayos X de Tórax' },
+                { id: 'checkOdonto', emisorId: 'emisorOdonto', colegiadoId: 'colegiadoOdonto', statusId: 'statusOdonto', obsId: 'obsOdonto', nombre: 'Evaluación Odontológica' },
+                { id: 'checkFisico', emisorId: 'emisorFisico', colegiadoId: 'colegiadoFisico', statusId: 'statusFisico', obsId: 'obsFisico', nombre: 'Examen Físico General' }
+            ];
+
+            // 1. VALIDACIÓN 1: Verificar que las 4 casillas estén marcadas
+            const checkboxes = document.querySelectorAll('.exam-checkbox');
+            let marcados = 0;
+            checkboxes.forEach(cb => { if(cb.checked) marcados++; });
+
+            if (marcados < 4) {
+                document.getElementById('alertIncomplete').style.display = 'block';
+                return;
+            }
+
+            // 2. VALIDACIÓN 2 (NUEVA - ANTIFRAUDE): Verificar credenciales del médico emisor en cada examen marcado
+            let examenesSinDatosDoctor = [];
+
+            examenes.forEach(exam => {
+                const isChecked = document.getElementById(exam.id).checked;
+                const emisorVal = document.getElementById(exam.emisorId).value.trim();
+                const colegiadoVal = document.getElementById(exam.colegiadoId).value.trim();
+
+                if (isChecked && (emisorVal === "" || colegiadoVal === "")) {
+                    examenesSinDatosDoctor.push(exam.nombre);
+                }
+            });
+
+            if (examenesSinDatosDoctor.length > 0) {
+                const listaUl = document.getElementById('listaExamenesSinDatos');
+                listaUl.innerHTML = '';
+                examenesSinDatosDoctor.forEach(nombre => {
+                    const li = document.createElement('li');
+                    li.textContent = `• ${nombre}`;
+                    listaUl.appendChild(li);
+                });
+
+                document.getElementById('alertDoctorData').style.display = 'block';
+                return;
+            }
+
+            // 3. VALIDACIÓN 3: Verificar diagnósticos de No Apto y observaciones
+            let examenesNoAptos = [];
+            let faltaObservacion = false;
+
+            examenes.forEach(exam => {
+                const status = document.getElementById(exam.statusId).value;
+                const obsText = document.getElementById(exam.obsId).value.trim();
+
+                if (status === 'no_apto') {
+                    if (obsText === "") {
+                        faltaObservacion = true;
+                    }
+                    examenesNoAptos.push({
+                        nombre: exam.nombre,
+                        observacion: obsText !== "" ? obsText : "Sin observación ingresada."
+                    });
+                }
+            });
+
+            if (faltaObservacion) {
+                alert("Por favor, ingrese la observación médica requerida en todos los exámenes marcados como 'No Apto'.");
+                return;
+            }
+
+            // 4. VALIDACIÓN 4: Estado de Vacunas
+            const simulacionBD = document.getElementById('simulacionBD').value;
+            const tieneVacunasFaltantes = (simulacionBD === 'incompleto');
+
+            // 5. DECISIÓN FINAL
+            if (examenesNoAptos.length > 0 || tieneVacunasFaltantes) {
+                const secExam = document.getElementById('sectionExamRejection');
+                const secVaccine = document.getElementById('sectionVaccineRejection');
+                const listaUl = document.getElementById('listaRechazosExamenes');
+
+                if (examenesNoAptos.length > 0) {
+                    listaUl.innerHTML = '';
+                    examenesNoAptos.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'rejection-item';
+                        li.innerHTML = `<strong>• ${item.nombre}:</strong> <em>Observación Médica: "${item.observacion}"</em>`;
+                        listaUl.appendChild(li);
+                    });
+                    secExam.style.display = 'block';
+                } else {
+                    secExam.style.display = 'none';
+                }
+
+                secVaccine.style.display = tieneVacunasFaltantes ? 'block' : 'none';
+                document.getElementById('alertGlobalDanger').style.display = 'block';
+            } else {
+                document.getElementById('alertSuccess').style.display = 'block';
             }
         }
     </script>
