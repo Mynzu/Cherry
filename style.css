@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master - Panel Principal</title>
+    <style>
+        /* Reset general */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif, system-ui;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden; /* Evita barras de desplazamiento */
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-color: #0a1426;
+        }
+
+        /* CAPA DEL FONDO GIF (Ocupa el 100% real de la pantalla sin cortes) */
+        .bg-gif-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-gif-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Asegura que cubra toda la pantalla */
+            object-position: center;
+        }
+
+        /* CAPA DE OSCURECIMIENTO (Tinte semitransparente azul) */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 20, 38, 0.75); /* Ajusta aquí la oscuridad si lo quieres más claro o más oscuro */
+            z-index: -1;
+        }
+
+        /* CONTENEDOR PRINCIPAL GLASSMORPHISM */
+        .main-wrapper {
+            position: relative;
+            width: 950px;
+            height: 540px;
+            display: flex;
+            align-items: center;
+            z-index: 1;
+        }
+
+        /* Tarjeta Izquierda (Menú) */
+        .left-menu-card {
+            position: absolute;
+            left: 0;
+            width: 480px;
+            height: 480px;
+            background: rgba(15, 32, 67, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 12px;
+            z-index: 1;
+        }
+
+        .menu-title {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Botones del menú */
+        .menu-btn {
+            width: 100%;
+            padding: 13px 22px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 25px;
+            color: #d1e5f7;
+            font-size: 0.98rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .menu-btn:hover {
+            background: rgba(0, 180, 216, 0.25);
+            color: #ffffff;
+            border-color: rgba(0, 180, 216, 0.5);
+            transform: translateX(5px);
+        }
+
+        .menu-btn.active {
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            box-shadow: 0 5px 18px rgba(0, 180, 216, 0.45);
+            border-color: transparent;
+            color: #ffffff;
+            font-weight: 600;
+            transform: translateX(5px);
+        }
+
+        /* Tarjeta Derecha (Área de datos e ingresos) */
+        .right-data-card {
+            position: absolute;
+            right: 0;
+            width: 520px;
+            height: 520px;
+            background: rgba(10, 22, 42, 0.88);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 30px;
+            border: 1px solid rgba(0, 180, 216, 0.22);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.65);
+            padding: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #ffffff;
+            z-index: 2;
+        }
+
+        .right-data-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #ffffff, #90e0ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Campos de entrada */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input, 
+        .input-group select {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-bottom: 2px solid rgba(144, 224, 239, 0.35);
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            border-radius: 8px 8px 0 0;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .input-group input:focus, 
+        .input-group select:focus {
+            border-bottom-color: #00b4d8;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(200, 225, 245, 0.55);
+        }
+
+        /* Botón de envío */
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 180, 216, 0.5);
+        }
+
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FONDO GIF COMPLETO DE PANTALLA -->
+    <div class="bg-gif-container">
+        <!-- Reemplaza 'fondo.gif' por la ruta de tu archivo de imagen o GIF -->
+        <img src="fondo.gif" alt="Fondo interactivo">
+    </div>
+
+    <!-- CAPA OSCURA PARA CONTROLAR LA TRANSPARENCIA DEL GIF -->
+    <div class="bg-overlay"></div>
+
+    <!-- TARJETAS DE NAVEGACIÓN Y FORMULARIO -->
+    <div class="main-wrapper">
+        
+        <!-- TARJETA IZQUIERDA: MENÚ -->
+        <div class="left-menu-card">
+            <h2 class="menu-title">Menú Principal</h2>
+            <a href="#" class="menu-btn active" onclick="mostrarSeccion(event, 'ingresar')">Ingresar</a>
+            <a href="#" class="menu-btn" onclick="mostrarSeccion(event, 'modificar')">Modificar</a>
+            <a href="#" class="menu-btn" onclick="mostrarSeccion(event, 'transferir')">Transferir Persona</a>
+            <a href="#" class="menu-btn" onclick="mostrarSeccion(event, 'correo')">Enviar Correo</a>
+            <a href="#" class="menu-btn" onclick="mostrarSeccion(event, 'bitacora')">Bitácora</a>
+        </div>
+
+        <!-- TARJETA DERECHA: DATOS Y FORMULARIOS -->
+        <div class="right-data-card">
+            
+            <div id="ingresar" class="form-section active">
+                <h2>Ingresar</h2>
+                <form>
+                    <div class="input-group">
+                        <input type="text" placeholder="Código / Identificación" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" placeholder="Contraseña" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Entrar al Sistema</button>
+                </form>
+            </div>
+
+            <div id="modificar" class="form-section">
+                <h2>Modificar Datos</h2>
+                <form>
+                    <div class="input-group">
+                        <input type="text" placeholder="Buscar registro a modificar" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Nuevo valor o campo" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Guardar Cambios</button>
+                </form>
+            </div>
+
+            <div id="transferir" class="form-section">
+                <h2>Transferir Persona</h2>
+                <form>
+                    <div class="input-group">
+                        <input type="text" placeholder="Nombre o ID de la persona" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Lugar / Área de Origen" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Lugar / Área de Destino" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Procesar Traslado</button>
+                </form>
+            </div>
+
+            <div id="correo" class="form-section">
+                <h2>Enviar Correo</h2>
+                <form>
+                    <div class="input-group">
+                        <input type="email" placeholder="Correo del destinatario" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" placeholder="Asunto del mensaje" required>
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+
+            <div id="bitacora" class="form-section">
+                <h2>Bitácora de Actividades</h2>
+                <p style="color: rgba(224, 242, 254, 0.85); line-height: 1.6;">
+                    Aquí se visualiza el registro de movimientos y eventos recientes dentro del sistema de forma detallada.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        function mostrarSeccion(event, idSeccion) {
+            event.preventDefault();
+
+            const secciones = document.querySelectorAll('.form-section');
+            secciones.forEach(sec => sec.classList.remove('active'));
+
+            const botones = document.querySelectorAll('.menu-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(idSeccion).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
