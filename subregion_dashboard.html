@@ -22,41 +22,46 @@
             flex-direction: column;
         }
 
-        /* Header */
+        /* Header Rediseñado y Limpio */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 40px;
-            background: rgba(15, 23, 42, 0.8);
+            padding: 16px 40px;
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-brand {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: bold;
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .nav-brand span {
-            opacity: 0.6;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .nav-brand span.active {
-            opacity: 1;
             color: #38bdf8;
-            border-bottom: 2px solid #38bdf8;
-            padding-bottom: 4px;
+            letter-spacing: 0.5px;
         }
 
-        .user-info {
-            font-size: 14px;
-            opacity: 0.85;
+        /* Botón Volver al Inicio Estilizado (Reemplaza a Cerrar Sesión) */
+        .btn-volver {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ff9999;
+            text-decoration: none;
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: rgba(255, 107, 107, 0.1);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-volver:hover {
+            background: rgba(255, 107, 107, 0.25);
+            border-color: rgba(255, 107, 107, 0.8);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
         }
 
         /* Container */
@@ -69,7 +74,7 @@
         }
 
         .dashboard-card {
-            background: rgba(23, 30, 43, 0.85);
+            background: rgba(23, 30, 43, 0.88);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 16px;
@@ -77,6 +82,7 @@
             max-width: 900px;
             padding: 35px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            text-align: center;
         }
 
         h2 {
@@ -85,6 +91,25 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 12px;
             color: #f8fafc;
+        }
+
+        /* Tarjeta de Identificación del Evaluador (Reubicada dentro del panel principal) */
+        .evaluator-badge {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .evaluator-badge strong {
+            color: #38bdf8;
         }
 
         /* Controls */
@@ -117,6 +142,7 @@
             margin: 20px 0 12px 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            text-align: center;
         }
 
         /* Search Box */
@@ -159,6 +185,7 @@
             margin-bottom: 20px;
             font-size: 14px;
             display: none;
+            text-align: left;
         }
 
         /* Exams Grid */
@@ -175,6 +202,7 @@
             border-radius: 10px;
             padding: 16px;
             transition: 0.3s;
+            text-align: left;
         }
 
         .exam-header {
@@ -281,6 +309,7 @@
             font-size: 14px;
             display: none;
             line-height: 1.6;
+            text-align: left;
         }
 
         .alert-warning {
@@ -334,20 +363,24 @@
 </head>
 <body>
 
+    <!-- Header Limpio y Consistente -->
     <header>
         <div class="nav-brand">
-            <span>Master</span>
-            <span class="active">Sub-Región (Evaluación)</span>
-            <span>Centro Vacunación</span>
+            Panel de Evaluación - Sub-Región Sanitaria
         </div>
-        <div class="user-info">
-            Evaluador: <strong>Dr. Daniel Franco</strong> | <a href="index.html" style="color: #38bdf8; text-decoration: none; margin-left: 10px;">Cerrar Sesión</a>
+        <div>
+            <a href="index.html" class="btn-volver">← Volver al Inicio</a>
         </div>
     </header>
 
     <main>
-        <div class="dashboard-card"style="text-align: center;">
+        <div class="dashboard-card">
             <h2>Evaluación y Verificación Sanitaria</h2>
+
+            <!-- Ficha del Evaluador Elegante Integrada -->
+            <div class="evaluator-badge">
+                <span>🩺 Médico Evaluador en Turno:</span> <strong>Dr. Daniel Franco</strong>
+            </div>
 
             <!-- Modo Simulación -->
             <div class="demo-controls">
@@ -372,7 +405,7 @@
             </div>
 
             <!-- Exámenes Médicos con Evaluación de Aptitud -->
-            <div class="section-title"style="text-align: center;">Validación de Exámenes y Evaluación Médica</div>
+            <div class="section-title">Validación de Exámenes y Evaluación Médica</div>
             <div class="exams-grid">
                 
                 <!-- Examen 1 -->
@@ -554,7 +587,6 @@
         function procesarSolicitud() {
             ocultarAlertas();
 
-            // Configuración de los 4 exámenes y sus campos de credenciales
             const examenes = [
                 { id: 'checkLab', emisorId: 'emisorLab', colegiadoId: 'colegiadoLab', statusId: 'statusLab', obsId: 'obsLab', nombre: 'Laboratorio (VDRL / Heces)' },
                 { id: 'checkTorax', emisorId: 'emisorTorax', colegiadoId: 'colegiadoTorax', statusId: 'statusTorax', obsId: 'obsTorax', nombre: 'Rayos X de Tórax' },
@@ -562,7 +594,6 @@
                 { id: 'checkFisico', emisorId: 'emisorFisico', colegiadoId: 'colegiadoFisico', statusId: 'statusFisico', obsId: 'obsFisico', nombre: 'Examen Físico General' }
             ];
 
-            // 1. VALIDACIÓN 1: Verificar que las 4 casillas estén marcadas
             const checkboxes = document.querySelectorAll('.exam-checkbox');
             let marcados = 0;
             checkboxes.forEach(cb => { if(cb.checked) marcados++; });
@@ -572,85 +603,9 @@
                 return;
             }
 
-            // 2. VALIDACIÓN 2 (NUEVA - ANTIFRAUDE): Verificar credenciales del médico emisor en cada examen marcado
             let examenesSinDatosDoctor = [];
 
             examenes.forEach(exam => {
                 const isChecked = document.getElementById(exam.id).checked;
                 const emisorVal = document.getElementById(exam.emisorId).value.trim();
-                const colegiadoVal = document.getElementById(exam.colegiadoId).value.trim();
-
-                if (isChecked && (emisorVal === "" || colegiadoVal === "")) {
-                    examenesSinDatosDoctor.push(exam.nombre);
-                }
-            });
-
-            if (examenesSinDatosDoctor.length > 0) {
-                const listaUl = document.getElementById('listaExamenesSinDatos');
-                listaUl.innerHTML = '';
-                examenesSinDatosDoctor.forEach(nombre => {
-                    const li = document.createElement('li');
-                    li.textContent = `• ${nombre}`;
-                    listaUl.appendChild(li);
-                });
-
-                document.getElementById('alertDoctorData').style.display = 'block';
-                return;
-            }
-
-            // 3. VALIDACIÓN 3: Verificar diagnósticos de No Apto y observaciones
-            let examenesNoAptos = [];
-            let faltaObservacion = false;
-
-            examenes.forEach(exam => {
-                const status = document.getElementById(exam.statusId).value;
-                const obsText = document.getElementById(exam.obsId).value.trim();
-
-                if (status === 'no_apto') {
-                    if (obsText === "") {
-                        faltaObservacion = true;
-                    }
-                    examenesNoAptos.push({
-                        nombre: exam.nombre,
-                        observacion: obsText !== "" ? obsText : "Sin observación ingresada."
-                    });
-                }
-            });
-
-            if (faltaObservacion) {
-                alert("Por favor, ingrese la observación médica requerida en todos los exámenes marcados como 'No Apto'.");
-                return;
-            }
-
-            // 4. VALIDACIÓN 4: Estado de Vacunas
-            const simulacionBD = document.getElementById('simulacionBD').value;
-            const tieneVacunasFaltantes = (simulacionBD === 'incompleto');
-
-            // 5. DECISIÓN FINAL
-            if (examenesNoAptos.length > 0 || tieneVacunasFaltantes) {
-                const secExam = document.getElementById('sectionExamRejection');
-                const secVaccine = document.getElementById('sectionVaccineRejection');
-                const listaUl = document.getElementById('listaRechazosExamenes');
-
-                if (examenesNoAptos.length > 0) {
-                    listaUl.innerHTML = '';
-                    examenesNoAptos.forEach(item => {
-                        const li = document.createElement('li');
-                        li.className = 'rejection-item';
-                        li.innerHTML = `<strong>• ${item.nombre}:</strong> <em>Observación Médica: "${item.observacion}"</em>`;
-                        listaUl.appendChild(li);
-                    });
-                    secExam.style.display = 'block';
-                } else {
-                    secExam.style.display = 'none';
-                }
-
-                secVaccine.style.display = tieneVacunasFaltantes ? 'block' : 'none';
-                document.getElementById('alertGlobalDanger').style.display = 'block';
-            } else {
-                document.getElementById('alertSuccess').style.display = 'block';
-            }
-        }
-    </script>
-</body>
-</html>
+                const colegiadoVal = document.getElementById(exam.colegiadoId).value

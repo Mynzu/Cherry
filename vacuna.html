@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Clínico de Vacunación - Modo Oscuro Azul</title>
+    <title>Registro Clínico de Vacunación - Venezuela</title>
     
     <!-- CDN Oficial Completa de Vue 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -25,7 +25,6 @@
             overflow: hidden;
         }
 
-        /* Contenedor Principal Vue */
         #app {
             display: flex;
             width: 100vw;
@@ -53,17 +52,11 @@
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Panel Izquierdo: Sidebar Estilizado */
+        /* Panel Izquierdo */
         .sidebar {
             width: 35%;
             background: linear-gradient(135deg, rgba(11, 19, 43, 0.94), rgba(28, 37, 65, 0.88)), 
@@ -115,7 +108,7 @@
             box-shadow: 0 0 20px rgba(76, 201, 240, 0.5);
         }
 
-        /* Panel Derecho: Scroll y Formulario */
+        /* Panel Derecho */
         .main-content {
             width: 65%;
             padding: 40px 60px;
@@ -125,34 +118,21 @@
             gap: 35px;
         }
 
-        /* Custom Scrollbar Moderno */
-        .main-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        .main-content::-webkit-scrollbar-track {
-            background: #0b132b;
-        }
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-track { background: #0b132b; }
         .main-content::-webkit-scrollbar-thumb {
             background: #1c2541;
             border-radius: 4px;
             border: 1px solid rgba(72, 149, 239, 0.2);
         }
-        .main-content::-webkit-scrollbar-thumb:hover {
-            background: #3a506b;
-        }
+        .main-content::-webkit-scrollbar-thumb:hover { background: #3a506b; }
 
-        /* Tarjetas de Sección */
         .section-card {
             background-color: #1c2541;
             padding: 35px;
             border-radius: 16px;
             border: 1px solid rgba(72, 149, 239, 0.15);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .section-card:hover {
-            border-color: rgba(72, 149, 239, 0.3);
         }
 
         h2 {
@@ -182,9 +162,7 @@
             gap: 12px;
         }
 
-        .search-box input {
-            flex: 1;
-        }
+        .search-box input { flex: 1; }
 
         .btn-search {
             background-color: #3a506b;
@@ -203,7 +181,6 @@
             box-shadow: 0 0 15px rgba(76, 201, 240, 0.4);
         }
 
-        /* Resultados de Búsqueda */
         .search-results {
             margin-top: 20px;
             padding: 24px;
@@ -239,9 +216,7 @@
             gap: 22px;
         }
 
-        .full-width {
-            grid-column: span 2;
-        }
+        .full-width { grid-column: span 2; }
 
         .form-group {
             display: flex;
@@ -256,7 +231,6 @@
             letter-spacing: 0.3px;
         }
 
-        /* Inputs y Selects */
         input, select, textarea {
             padding: 14px;
             background-color: #0b132b;
@@ -279,7 +253,6 @@
             color: #ffffff;
         }
 
-        /* Botón Guardar */
         .btn-submit {
             grid-column: span 2;
             background: linear-gradient(90deg, #3a86ff, #4cc9f0);
@@ -300,59 +273,34 @@
             transform: translateY(-1px);
         }
 
-        /* Responsividad (Móvil / Tablet) */
         @media (max-width: 992px) {
-            body {
-                overflow: auto;
-            }
-
-            #app {
-                flex-direction: column;
-                height: auto;
-            }
-
-            .sidebar {
-                width: 100%;
-                padding: 40px 30px;
-            }
-
-            .main-content {
-                width: 100%;
-                padding: 30px 20px;
-                overflow-y: visible;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .full-width, .btn-submit {
-                grid-column: span 1;
-            }
-
-            .search-results-grid {
-                grid-template-columns: 1fr;
-            }
+            body { overflow: auto; }
+            #app { flex-direction: column; height: auto; }
+            .sidebar { width: 100%; padding: 40px 30px; }
+            .main-content { width: 100%; padding: 30px 20px; overflow-y: visible; }
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width, .btn-submit { grid-column: span 1; }
+            .search-results-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div id="app">
 
-        <!-- Notificación Toast Personalizada -->
+        <!-- Notificación Toast -->
         <div v-if="mensajeNotificacion" class="toast-notification">
             <span>✨</span>
             <span>{{ mensajeNotificacion }}</span>
         </div>
 
-        <!-- PANEL IZQUIERDO: Imagen y Presentación -->
+        <!-- PANEL IZQUIERDO -->
         <div class="sidebar">
             <h1>Sistema de Vacunación</h1>
-            <p>Registro oficial de dosis y control de inmunización. Mantén el historial de la comunidad actualizado, seguro y al alcance de un clic.</p>
-            <a href="index.html" class="btn-back">← Volver al Inicio</a>
+            <p>Registro oficial de dosis y control de inmunización (PAI y COVID-19 en Venezuela). Mantén el historial actualizado y seguro.</p>
+            <a href="subregion_dashboard.html" class="btn-back">← Volver al Panel</a>
         </div>
 
-        <!-- PANEL DERECHO: Gestión (Buscador y Formulario) -->
+        <!-- PANEL DERECHO -->
         <div class="main-content">
 
             <!-- SECCIÓN 1: BUSCADOR -->
@@ -368,19 +316,19 @@
                         v-model="searchQuery" 
                         @keyup.enter="buscarPaciente" 
                         @input="alCambiarBusqueda"
-                        placeholder="Introduce la identificación (DNI / Cédula) del paciente..."
+                        placeholder="Introduce la Cédula o DNI del ciudadano..."
                     >
                     <button class="btn-search" type="button" @click="buscarPaciente">Buscar</button>
                 </div>
                 
-                <!-- Resultado de la Búsqueda -->
+                <!-- Resultados de Búsqueda -->
                 <div v-if="resultadoBusqueda" class="search-results">
                     <div style="color: #4cc9f0; font-weight: 700; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
                         📋 HISTORIAL CLÍNICO DETECTADO
                     </div>
                     <div class="search-results-grid">
                         <div><strong>Nombre:</strong> {{ resultadoBusqueda.nombre }}</div>
-                        <div><strong>Documento (DNI):</strong> {{ resultadoBusqueda.dni }}</div>
+                        <div><strong>Documento (Cédula):</strong> {{ resultadoBusqueda.dni }}</div>
                         <div><strong>Vacuna:</strong> {{ resultadoBusqueda.vacuna }}</div>
                         <div><strong>Dosis:</strong> {{ resultadoBusqueda.dosis }}</div>
                         <div><strong>Fecha Registro:</strong> {{ resultadoBusqueda.fecha }}</div>
@@ -390,7 +338,7 @@
                     </div>
                 </div>
 
-                <!-- Mensaje de No Resultados -->
+                <!-- Error -->
                 <div v-if="busquedaFallida" class="search-error">
                     ❌ Advertencia: No se encontraron registros asociados al número de identificación ingresado.
                 </div>
@@ -403,13 +351,13 @@
                     <div class="form-grid">
                         
                         <div class="form-group">
-                            <label>Número de Identificación (DNI / Cédula)</label>
-                            <input type="text" v-model="nuevoPaciente.dni" required placeholder="Ej: 12345678">
+                            <label>Número de Identificación (Cédula / DNI)</label>
+                            <input type="text" v-model="nuevoPaciente.dni" required placeholder="Ej: V-26543210">
                         </div>
 
                         <div class="form-group">
                             <label>Nombre Completo</label>
-                            <input type="text" v-model="nuevoPaciente.nombre" required placeholder="Ej: Juan Pérez">
+                            <input type="text" v-model="nuevoPaciente.nombre" required placeholder="Ej: María Rodríguez">
                         </div>
 
                         <div class="form-group">
@@ -428,13 +376,28 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Tipo de Vacuna / Laboratorio</label>
-                            <select v-model="nuevoPaciente.vacuna" required>
+                            <label>Tipo de Vacuna / Inmunización</label>
+                            <select v-model="nuevoPaciente.vacuna" @change="verificarDosisUnica" required>
                                 <option value="">Selecciona la vacuna aplicada</option>
-                                <option value="Pfizer-BioNTech">Pfizer-BioNTech</option>
-                                <option value="Moderna">Moderna</option>
-                                <option value="AstraZeneca">AstraZeneca</option>
-                                <option value="Sinopharm">Sinopharm</option>
+                                <optgroup label="Programa Ampliado de Inmunización (PAI - Venezuela)">
+                                    <option value="BCG (Tuberculosis)">BCG (Tuberculosis)</option>
+                                    <option value="Pentavalente (DPT+HepB+Hib)">Pentavalente (DPT + HepB + Hib)</option>
+                                    <option value="Hexavalente">Hexavalente</option>
+                                    <option value="Polio (Oral / IPV)">Polio (Oral / IPV)</option>
+                                    <option value="Toxoide Tetánico-Diftérico (Td)">Toxoide Tetánico-Diftérico (Td)</option>
+                                    <option value="Fiebre Amarilla (Antiamarílica)">Fiebre Amarilla (Antiamarílica)</option>
+                                    <option value="SRP (Sarampión, Rubeola, Parotiditis)">SRP (Sarampión, Rubeola, Parotiditis)</option>
+                                    <option value="SR (Sarampión y Rubeola)">SR (Sarampión y Rubeola)</option>
+                                    <option value="Hepatitis B (Adulto/Pediátrica)">Hepatitis B (Adulto / Pediátrica)</option>
+                                </optgroup>
+                                <optgroup label="Vacunas COVID-19 (Autorizadas en Venezuela)">
+                                    <option value="Sputnik V (Gam-COVID-Vac)">Sputnik V (Gam-COVID-Vac)</option>
+                                    <option value="Sinopharm (BBIBP-CorV)">Sinopharm (BBIBP-CorV)</option>
+                                    <option value="Abdala (CIGB-66)">Abdala (CIGB-66)</option>
+                                    <option value="Verocell / Covilo">Verocell / Covilo</option>
+                                    <option value="Pfizer-BioNTech (Comirnaty)">Pfizer-BioNTech (Comirnaty)</option>
+                                    <option value="AstraZeneca (Vaxzevria)">AstraZeneca (Vaxzevria)</option>
+                                </optgroup>
                                 <option value="Otra / No especificada">Otra / No especificada</option>
                             </select>
                         </div>
@@ -443,10 +406,13 @@
                             <label>Número de Dosis</label>
                             <select v-model="nuevoPaciente.dosis" required>
                                 <option value="">Selecciona la dosis correspondiente</option>
+                                <option value="Dosis Única">Dosis Única</option>
                                 <option value="Primera Dosis">Primera Dosis</option>
                                 <option value="Segunda Dosis">Segunda Dosis</option>
-                                <option value="Tercera Dosis (Refuerzo)">Tercera Dosis (Refuerzo)</option>
-                                <option value="Cuarta Dosis o Posterior">Cuarta Dosis o Posterior</option>
+                                <option value="Tercera Dosis">Tercera Dosis</option>
+                                <option value="Primer Refuerzo">Primer Refuerzo</option>
+                                <option value="Segundo Refuerzo">Segundo Refuerzo</option>
+                                <option value="Dosis de Refuerzo Anual">Dosis de Refuerzo Anual</option>
                             </select>
                         </div>
 
@@ -461,13 +427,13 @@
                         </div>
 
                         <div class="form-group full-width">
-                            <label>Centro de Vacunación / Hospital</label>
-                            <input type="text" v-model="nuevoPaciente.centro" required placeholder="Ej: Hospital Clínico Universitario">
+                            <label>Centro de Vacunación / Hospital / Ambulatorio</label>
+                            <input type="text" v-model="nuevoPaciente.centro" required placeholder="Ej: Ambulatorio Urbano Dr. Arístides Malpica">
                         </div>
 
                         <div class="form-group full-width">
                             <label>Observaciones Médicas / Sintomatología</label>
-                            <textarea v-model="nuevoPaciente.observaciones" rows="3" placeholder="Registra alergias, reacciones inmediatas o datos relevantes del paciente..."></textarea>
+                            <textarea v-model="nuevoPaciente.observaciones" rows="3" placeholder="Registra alergias, reacciones inmediatas o datos relevantes..."></textarea>
                         </div>
 
                         <button type="submit" class="btn-submit">Guardar y Anexar al Registro</button>
@@ -484,13 +450,11 @@
 
         createApp({
             setup() {
-                // Estado para el buscador y notificaciones
                 const searchQuery = ref('');
                 const resultadoBusqueda = ref(null);
                 const busquedaFallida = ref(false);
                 const mensajeNotificacion = ref('');
 
-                // Formulario
                 const nuevoPaciente = ref({
                     dni: '',
                     nombre: '',
@@ -504,37 +468,35 @@
                     observaciones: ''
                 });
 
-                // Registros iniciales por defecto
                 const datosPorDefecto = [
                     {
-                        dni: "12345678",
-                        nombre: "Juan Pérez",
-                        fechaNacimiento: "1992-04-12",
-                        genero: "M",
-                        vacuna: "Pfizer-BioNTech",
-                        dosis: "Segunda Dosis",
-                        fecha: "2026-04-15",
-                        lote: "PF-8821",
-                        centro: "Hospital Clínico Universitario",
-                        observaciones: "Ninguna reacción adversa registrada."
+                        dni: "V-26543210",
+                        nombre: "María Rodríguez",
+                        fechaNacimiento: "1995-06-15",
+                        genero: "F",
+                        vacuna: "Toxoide Tetánico-Diftérico (Td)",
+                        dosis: "Primer Refuerzo",
+                        fecha: "2026-01-10",
+                        lote: "TX-9921",
+                        centro: "Hospital Central de Maracay",
+                        observaciones: "Sin reacciones adversas inmediatas."
                     },
                     {
-                        dni: "87654321",
-                        nombre: "María Rodríguez",
-                        fechaNacimiento: "1988-09-25",
-                        genero: "F",
-                        vacuna: "Moderna",
-                        dosis: "Primera Dosis",
-                        fecha: "2026-05-20",
-                        lote: "MD-3310",
-                        centro: "Centro Sanitario Norte",
-                        observaciones: "Dolor muscular leve en el brazo."
+                        dni: "V-18432111",
+                        nombre: "Carlos Pérez",
+                        fechaNacimiento: "1982-11-03",
+                        genero: "M",
+                        vacuna: "Sinopharm (BBIBP-CorV)",
+                        dosis: "Segunda Dosis",
+                        fecha: "2026-03-12",
+                        lote: "SIN-4410",
+                        centro: "Ambulatorio del Norte",
+                        observaciones: "Paciente apto."
                     }
                 ];
 
                 const baseDeDatosVacunas = ref([]);
 
-                // Cargar datos guardados en LocalStorage
                 onMounted(() => {
                     const guardados = localStorage.getItem('registros_vacunacion');
                     if (guardados) {
@@ -560,7 +522,14 @@
                     }, 3500);
                 };
 
-                // Limpiar consulta si el campo queda vacío
+                // Asignación automática inteligente para vacunas de dosis única
+                const verificarDosisUnica = () => {
+                    const vacunasUnicas = ['BCG (Tuberculosis)', 'Fiebre Amarilla (Antiamarílica)'];
+                    if (vacunasUnicas.includes(nuevoPaciente.value.vacuna)) {
+                        nuevoPaciente.value.dosis = 'Dosis Única';
+                    }
+                };
+
                 const alCambiarBusqueda = () => {
                     if (!searchQuery.value.trim()) {
                         resultadoBusqueda.value = null;
@@ -568,11 +537,10 @@
                     }
                 };
 
-                // Función para realizar la búsqueda
                 const buscarPaciente = () => {
                     const query = searchQuery.value.trim().toLowerCase();
                     if (!query) {
-                        mostrarNotificacion("Por favor, ingresa un número de documento para buscar.");
+                        mostrarNotificacion("Por favor, ingresa un número de cédula para buscar.");
                         return;
                     }
 
@@ -587,23 +555,31 @@
                     }
                 };
 
-                // Guardar nuevo registro
                 const anexarRegistro = () => {
-                    // Agregar a la base reactiva
+                    // Validación de fechas (Fecha de aplicación vs Nacimiento y Futuro)
+                    const fechaNac = new Date(nuevoPaciente.value.fechaNacimiento);
+                    const fechaApp = new Date(nuevoPaciente.value.fecha);
+                    const hoy = new Date();
+
+                    if (fechaApp < fechaNac) {
+                        alert("Error clínico: La fecha de aplicación de la vacuna no puede ser anterior a la fecha de nacimiento del paciente.");
+                        return;
+                    }
+
+                    if (fechaApp > hoy) {
+                        alert("Error: La fecha de aplicación no puede ser una fecha futura.");
+                        return;
+                    }
+
                     baseDeDatosVacunas.value.unshift({ ...nuevoPaciente.value });
-                    
-                    // Persistir en LocalStorage
                     guardarEnStorage();
 
-                    // Notificación en pantalla
                     mostrarNotificacion(`¡Registro guardado con éxito para ${nuevoPaciente.value.nombre}!`);
 
-                    // Limpiar el buscador si coincidía con el nuevo registro para refrescarlo
                     if (searchQuery.value.trim() === nuevoPaciente.value.dni.trim()) {
                         buscarPaciente();
                     }
 
-                    // Resetear formulario
                     nuevoPaciente.value = {
                         dni: '',
                         nombre: '',
@@ -627,7 +603,8 @@
                     mensajeNotificacion,
                     buscarPaciente,
                     alCambiarBusqueda,
-                    anexarRegistro
+                    anexarRegistro,
+                    verificarDosisUnica
                 };
             }
         }).mount('#app');

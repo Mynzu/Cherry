@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master</title>
+    <title>Master - Panel de Administración</title>
     <!-- Vue.js 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
@@ -13,7 +13,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif, system-ui;
-            /*lo mismo de siempre, para que se mantenga*/
         }
 
         html, body {
@@ -30,7 +29,7 @@
             background-color: #0a1426;
         }
 
-        /* la capa del fondo, donde va el gif */
+        /* Capa del fondo (Gif) */
         .bg-gif-container {
             position: fixed;
             top: 0;
@@ -48,7 +47,7 @@
             object-position: center;
         }
 
-        /* editamos el giif */
+        /* Capa oscura */
         .bg-overlay {
             position: fixed;
             top: 0;
@@ -68,7 +67,7 @@
             z-index: 1;
         }
 
-        /* la tarjeta izquierda el menú */
+        /* Tarjeta izquierda: Menú */
         .left-menu-card {
             position: absolute;
             left: 0;
@@ -83,8 +82,7 @@
             padding: 35px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            gap: 12px;
+            gap: 10px;
             z-index: 1;
         }
 
@@ -92,7 +90,7 @@
             color: #ffffff;
             font-size: 1.8rem;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             letter-spacing: 0.5px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
@@ -100,12 +98,12 @@
         /* Botones del menú */
         .menu-btn {
             width: 100%;
-            padding: 13px 22px;
+            padding: 12px 22px;
             background: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 25px;
             color: #d1e5f7;
-            font-size: 0.98rem;
+            font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
             text-align: left;
@@ -130,7 +128,19 @@
             transform: translateX(5px);
         }
 
-        /* tarjeta derecha */
+        .logout-btn {
+            margin-top: auto;
+            border-color: rgba(255, 107, 107, 0.3);
+            color: #ff9999;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 107, 107, 0.2) !important;
+            border-color: rgba(255, 107, 107, 0.6) !important;
+            color: #ffffff !important;
+        }
+
+        /* Tarjeta derecha */
         .right-data-card {
             position: absolute;
             right: 0;
@@ -151,15 +161,23 @@
             overflow-y: auto;
         }
 
+        .right-data-card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .right-data-card::-webkit-scrollbar-thumb {
+            background: rgba(0, 180, 216, 0.3);
+            border-radius: 3px;
+        }
+
         .right-data-card h2 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             margin-bottom: 15px;
             background: linear-gradient(90deg, #ffffff, #90e0ef);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /*Campos de entrada*/
+        /* Campos de entrada */
         .input-group {
             margin-bottom: 12px;
             display: flex;
@@ -198,7 +216,6 @@
             color: rgba(200, 225, 245, 0.35);
         }
 
-        /* Botón de envío*/
         .submit-btn {
             width: 100%;
             padding: 12px;
@@ -222,35 +239,21 @@
             background: rgba(255, 255, 255, 0.1);
             margin-top: 5px;
         }
-
-        .register-redirect {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .register-redirect a {
-            color: #ff6b6b;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-        }
     </style>
 </head>
 <body>
 
     <div id="app">
-        <!--el gif-->
+        <!-- Fondo animado/imagen -->
         <div class="bg-gif-container">
             <img src="fondo.gif" alt="Fondo interactivo">
         </div>
 
-        <!-- para que sea oscurityo-->
         <div class="bg-overlay"></div>
 
-        <!--para mantenerse -->
         <div class="main-wrapper">
             
-            <!--la tarjeta izquierda -->
+            <!-- Menú Izquierdo -->
             <div class="left-menu-card">
                 <h2 class="menu-title">Menú Principal</h2>
                 <a href="#" class="menu-btn" :class="{ active: seccionActual === 'ingresar' }" @click.prevent="seccionActual = 'ingresar'">Ingresar</a>
@@ -258,12 +261,14 @@
                 <a href="#" class="menu-btn" :class="{ active: seccionActual === 'transferir' }" @click.prevent="seccionActual = 'transferir'">Transferir Persona</a>
                 <a href="#" class="menu-btn" :class="{ active: seccionActual === 'correo' }" @click.prevent="seccionActual = 'correo'">Enviar Correo</a>
                 <a href="#" class="menu-btn" :class="{ active: seccionActual === 'bitacora' }" @click.prevent="seccionActual = 'bitacora'">Bitácora</a>
+                
+                <a href="index.html" class="menu-btn logout-btn">← Volver al Inicio</a>
             </div>
 
-            <!-- tarjeta derecha-->
+            <!-- Tarjeta Derecha Dinámica -->
             <div class="right-data-card">
                 
-                <!--ingresar -->
+                <!-- Ingresar -->
                 <div v-if="seccionActual === 'ingresar'" class="form-section">
                     <h2>Master</h2>
                     <form @submit.prevent="procesarFormulario('Ingresar Master')">
@@ -287,20 +292,18 @@
                     </form>
                 </div>
 
-                <!--para modificar-->
+                <!-- Modificar Datos -->
                 <div v-if="seccionActual === 'modificar'" class="form-section">
                     <h2>Modificar Datos de Personal</h2>
 
-                    <!--para buscar -->
                     <form v-if="!personaEncontrada" @submit.prevent="buscarPersona">
                         <div class="input-group">
-                            <label for="buscarRegistro">Ingrese su cedula o codigo para buscar</label>
+                            <label for="buscarRegistro">Ingrese su cédula o código para buscar</label>
                             <input id="buscarRegistro" v-model="busquedaInput" type="text" placeholder="Ingrese Cédula o Código (Ej: 12345)" required>
                         </div>
                         <button type="submit" class="submit-btn">Buscar en el Sistema</button>
                     </form>
 
-                    <!-- mostramos todos los datos cargados para editar, que deberian de estar en la base de datos -->
                     <form v-else @submit.prevent="guardarModificacion">
                         <p style="font-size: 0.85rem; color: #90e0ef; margin-bottom: 12px;">
                             Registro encontrado. Modifique los campos necesarios:
@@ -331,9 +334,9 @@
                     </form>
                 </div>
 
-                <!--transferir-->
+                <!-- Transferir Persona -->
                 <div v-if="seccionActual === 'transferir'" class="form-section">
-                    <h2>Transferir Personla</h2>
+                    <h2>Transferir Personal</h2>
                     <form @submit.prevent="procesarFormulario('Transferir')">
                         <div class="input-group">
                             <label for="nombrePersona">Nombre / ID de la Persona</label>
@@ -351,7 +354,7 @@
                     </form>
                 </div>
 
-                <!--correo -->
+                <!-- Enviar Correo -->
                 <div v-if="seccionActual === 'correo'" class="form-section">
                     <h2>Enviar Correo</h2>
                     <form @submit.prevent="procesarFormulario('Enviar Correo')">
@@ -363,18 +366,35 @@
                             <label for="asunto">Asunto del Mensaje</label>
                             <input id="asunto" v-model="formCorreo.asunto" type="text" placeholder="Escriba el asunto..." required>
                         </div>
+                        <div class="input-group">
+                            <label for="cuerpo">Mensaje</label>
+                            <input id="cuerpo" type="text" placeholder="Escriba el contenido del correo..." required>
+                        </div>
                         <button type="submit" class="submit-btn">Enviar Mensaje</button>
-                        <!--tengo que investifgar como se ancla esto al correo-->
                     </form>
                 </div>
 
-                <!--birtacora -->
+                <!-- Bitácora -->
                 <div v-if="seccionActual === 'bitacora'" class="form-section">
                     <h2>Bitácora de Actividades</h2>
-                    <p style="color: rgba(224, 242, 254, 0.85); line-height: 1.6;">
-                        <!--me falta investigar como se hace esto tambien-->
-
+                    <p style="color: rgba(224, 242, 254, 0.85); font-size: 0.82rem; margin-bottom: 8px;">
+                        Registro cronológico de acciones administrativas:
                     </p>
+
+                    <!-- Barra de búsqueda / Lupa -->
+                    <div class="input-group" style="margin-bottom: 10px;">
+                        <input type="text" v-model="filtroBitacora" placeholder="🔍 Buscar por usuario, fecha o acción...">
+                    </div>
+
+                    <!-- Lista filtrada de la bitácora -->
+                    <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px; max-height: 270px; overflow-y: auto; font-size: 0.82rem; display: flex; flex-direction: column; gap: 8px;">
+                        <div v-for="(item, index) in bitacoraFiltrada" :key="index" style="padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                            <strong style="color: #90e0ef;">[{{ item.fecha }}]</strong> - <span style="color: #ffb703;">{{ item.usuario }}</span>: {{ item.accion }}
+                        </div>
+                        <div v-if="bitacoraFiltrada.length === 0" style="padding: 15px; text-align: center; color: rgba(255,255,255,0.5);">
+                            No se encontraron registros coincidentes.
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -382,20 +402,18 @@
         </div>
     </div>
 
-    <!-- el javascript con vue -->
+    <!-- Lógica Vue 3 -->
     <script>
-        const { createApp, ref } = Vue;
+        const { createApp, ref, computed } = Vue;
 
         createApp({
             setup() {
                 const seccionActual = ref('ingresar');
 
-                //modelos
                 const formIngresar = ref({ usuario: '', region: '', centro: '', password: '' });
                 const formTransferir = ref({ persona: '', origen: '', destino: '' });
                 const formCorreo = ref({ email: '', asunto: '' });
 
-                // lo simulado de la busqueda
                 const busquedaInput = ref('');
                 const personaEncontrada = ref(false);
                 const personaSeleccionada = ref({
@@ -405,8 +423,26 @@
                     estado: ''
                 });
 
+                // Datos y filtro de la Bitácora
+                const filtroBitacora = ref('');
+                const bitacoraList = ref([
+                    { fecha: '26/10/2026 - 15:42', usuario: 'Master (REG-ARAGUA)', accion: 'Inicio de sesión Master en sistema' },
+                    { fecha: '26/10/2026 - 14:15', usuario: 'Keynner Lopez', accion: 'Modificación de datos de personal' },
+                    { fecha: '26/10/2026 - 12:30', usuario: 'Administrador', accion: 'Envío de notificación por correo institucional' },
+                    { fecha: '25/10/2026 - 09:10', usuario: 'Maria Rodriguez', accion: 'Actualización de esquema de vacunación' }
+                ]);
+
+                const bitacoraFiltrada = computed(() => {
+                    if (!filtroBitacora.value.trim()) return bitacoraList.value;
+                    const query = filtroBitacora.value.toLowerCase();
+                    return bitacoraList.value.filter(item => 
+                        item.usuario.toLowerCase().includes(query) || 
+                        item.fecha.toLowerCase().includes(query) || 
+                        item.accion.toLowerCase().includes(query)
+                    );
+                });
+
                 const buscarPersona = () => {
-                    // Simulación de datos cargados según el código ingresado
                     personaSeleccionada.value = {
                         nombre: 'Keynner Lopez',
                         cedula: busquedaInput.value,
@@ -434,6 +470,8 @@
                     busquedaInput,
                     personaEncontrada,
                     personaSeleccionada,
+                    filtroBitacora,
+                    bitacoraFiltrada,
                     buscarPersona,
                     guardarModificacion,
                     procesarFormulario
