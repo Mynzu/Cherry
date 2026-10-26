@@ -332,6 +332,7 @@
     </style>
 </head>
 
+</head>
 <body>
     <div class="video-overlay"></div>
     <!--la capa oscura para que el fondo gif no canse la vista-->
@@ -339,7 +340,7 @@
     <div class="content-wrapper">
         <div class="top-navbar">
             <button class="settings-icon" title="Ajustes">☰</button>
-            
+
             <div class="circle-container">
                 <button type="button" class="profile-circle active" data-profile="master">Master</button>
                 <button type="button" class="profile-circle" data-profile="subregion">Sub-Region</button>
@@ -350,128 +351,169 @@
 
         <div class="center-container">
             <div class="main-dashboard">
-                
-                <div class="center-container">
-                    <div class="main-dashboard">
                         
-                        <div class="dashboard-left">
-                            <div class="interactive-drawing-card">
-                                <h4 style="margin-bottom: 6px; font-size: 1.1rem; font-weight: 700;">¿Buscas tu Certificado?</h4>
-                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-bottom: 15px;">¡¡Accede como ciudadano y descarga tu registro de Vacunacion!!</p>
-                                <a href="consulta.html" class="btn-submit" style="display: inline-block; text-decoration: none; width: auto; padding: 8px 20px; font-size: 0.95rem; margin-bottom: 0;">Accede a tu Registro</a>
-                            </div>
-                            <!--el cuadro del certificado para que la gente descargue su registro rapido -->
-                        </div>
-
-                        <div class="dashboard-right">
-                            <div class="custom-card">
-                                <div class="text-card-white mb-4">
-                                    <h2 id="login-title" style="font-size: 1.6rem; font-weight: 700;">Master</h2>
-                                </div>
-
-                                <form id="login">
-                                    <div class="mb-3" id="group-usuario">
-                                        <label for="usuario" class="form-label" id="label-usuario">Usuario Administrador</label>
-                                        <input type="text" id="usuario" class="form-control" placeholder="Ingrese código Master" required>
-                                    </div>
-
-                                    <div class="mb-3 d-none" id="group-region">
-                                        <label for="region" class="form-label">Código Regional</label>
-                                        <input type="text" id="region" class="form-control" placeholder="Ej: REG-ARAGUA">
-                                    </div>
-
-                                    <div class="mb-3 d-none" id="group-centro">
-                                        <label for="centro" class="form-label">ID del Centro Médico</label>
-                                        <input type="text" id="centro" class="form-control" placeholder="Ej: HOSP-021">
-                                    </div>
-
-                                    <div class="mb-4">
-                                        <label for="contraseña" class="form-label">Contraseña</label>
-                                        <input type="password" id="contraseña" class="form-control" placeholder="Ingrese su contraseña" required>
-                                    </div>
-
-                                    <button type="submit" class="btn-submit">Iniciar Sesión</button>
-
-                                    <div class="register-redirect">
-                                        <a href="recuperar.html" style="color: #ff6b6b; font-weight: 600;">¿Olvidaste tu contraseña?</a>
-                                    </div>
-                                    <!--el formulario completo con los campos que se muestran u ocultan segun el boton de arriba-->
-                                </form>
-                            </div>
-                            <!--la tarjeta del login bien acomodada a la derecha-->
-                        </div>
-
+                <div class="dashboard-left">
+                    <div class="interactive-drawing-card">
+                        <h4 style="margin-bottom: 6px; font-size: 1.1rem; font-weight: 700;">¿Buscas tu Certificado?</h4>
+                        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-bottom: 15px;">¡¡Accede como ciudadano y descarga tu registro de Vacunacion!!</p>
+                        <a href="consulta.html" class="btn-submit" style="display: inline-block; text-decoration: none; width: auto; padding: 8px 20px; font-size: 0.95rem; margin-bottom: 0;">Accede a tu Registro</a>
                     </div>
+                    <!--el cuadro del certificado para que la gente descargue su registro rapido -->
                 </div>
-                <!--la caja central que encierra el dashboard y las dos columnas-->
-            </div>
-        </div>
-    </div>
 
-    <script>
-        const circles = document.querySelectorAll('.profile-circle');
-        const loginTitle = document.getElementById('login-title');
-        const labelUsuario = document.getElementById('label-usuario');
-        const inputUsuario = document.getElementById('usuario');
+                <div class="dashboard-right">
+                    <div class="custom-card">
+                        <div class="text-card-white mb-4">
+                            <h2 id="login-title" style="font-size: 1.6rem; font-weight: 700;">Master</h2>
+                        </div>
 
-        const groupRegion = document.getElementById('group-region');    
-        const groupCentro = document.getElementById('group-centro');
-        const inputRegion = document.getElementById('region');
-        const inputCentro = document.getElementById('centro');
+                        <form id="login" novalidate> <!--meti validaciones-->
+                            <div class="mb-3" id="group-usuario">
+                                <label for="usuario" class="form-label" id="label-usuario">Usuario Administrador</label>
+                                <input type="text" id="usuario" class="form-control" placeholder="Ingrese código Master" required>
+                                <span class="error-msg" id="error-usuario" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
+                            </div>
 
-        circles.forEach(circle => {
+                            <div class="mb-3 d-none" id="group-region">
+                                <label for="region" class="form-label">Código Regional</label>
+                                <!-- Esto es para que quede tojo junto al metetr el codigo -->
+                                <input type="text" id="region" class="form-control" placeholder="Ej: REG-ARAGUA" pattern="^REG-[A-Za-z0-9]+$">
+                                <span class="error-msg" id="error-region" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
+                            </div>
+
+                            <div class="mb-3 d-none" id="group-centro">
+                                <label for="centro" class="form-label">ID del Centro Médico</label>
+                                <!--Lo mismo que el de arriba -->
+                                <input type="text" id="centro" class="form-control" placeholder="Ej: HOSP-021" pattern="^HOSP-[0-9]+$">
+                                <span class="error-msg" id="error-centro" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="contraseña" class="form-label">Contraseña</label>
+                                <input type="password" id="contraseña" class="form-control" placeholder="Ingrese su contraseña" minlength="6" required>
+                                <span class="error-msg" id="error-contraseña" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
+                            </div>
+
+                            <button type="submit" class="btn-submit">Iniciar Sesión</button>
+
+                            <div class="register-redirect">
+                                <a href="recuperar.html" style="color: #ff6b6b; font-weight: 600;">¿Olvidaste tu contraseña?</a>
+                            </div>
+                        </form>
+                    </div>
+                    <!--la tarjeta del login bien acomodada a la derecha-->
+                </div>
+
+            </div> <!-- Cierre de main-dashboard -->
+        </div> <!-- Cierre de center-container -->
+    </div> <!-- Cierre de content-wrapper -->
+
+<script>
+    const circles = document.querySelectorAll('.profile-circle');
+    const loginTitle = document.getElementById('login-title');
+    const labelUsuario = document.getElementById('label-usuario');
+    const inputUsuario = document.getElementById('usuario');
+
+    const groupRegion = document.getElementById('group-region');    
+    const groupCentro = document.getElementById('group-centro');
+    const inputRegion = document.getElementById('region');
+    const inputCentro = document.getElementById('centro');
+    const inputPassword = document.getElementById('contraseña');
+
+    // Cambios de perfil
+    circles.forEach(circle => {
         circle.addEventListener('click', () => {
-        circles.forEach(c => c.classList.remove('active'));
-        circle.classList.add('active');
+            circles.forEach(c => c.classList.remove('active'));
+            circle.classList.add('active');
 
-        const profile = circle.getAttribute('data-profile');
-        const card = document.querySelector('.custom-card'); 
+            const profile = circle.getAttribute('data-profile');
+            const card = document.querySelector('.custom-card'); 
+            
+            // Limpiar errores previos al cambiar de pestaña
+            document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
 
-        if (profile === 'master') {
-            loginTitle.innerText = "Iniciar Sesión: Master";
-            labelUsuario.innerText = "Usuario Administrador";
-            inputUsuario.placeholder = "Ingrese código Master";
-            
-            groupRegion.classList.add('d-none');
-            groupCentro.classList.add('d-none');
-            inputRegion.removeAttribute('required');
-            inputCentro.removeAttribute('required');
-            
-            card.style.minHeight = "380px"; 
-        } 
-        else if (profile === 'subregion') {
-            loginTitle.innerText = "Acceso: Sub-Region";
-            labelUsuario.innerText = "Usuario Regional";
-            inputUsuario.placeholder = "Ingrese usuario de sub-región";
-            
-            groupRegion.classList.remove('d-none');
-            groupCentro.classList.add('d-none');
-            inputRegion.setAttribute('required', 'true');
-            inputCentro.removeAttribute('required');
-            
-            card.style.minHeight = "460px"; 
-        } 
-        else if (profile === 'centro') {
-            loginTitle.innerText = "Acceso: Centro Médico";
-            labelUsuario.innerText = "Usuario del Centro";
-            inputUsuario.placeholder = "Ingrese usuario de enfermería";
-            
-            groupRegion.classList.add('d-none');
-            groupCentro.classList.remove('d-none');
-            inputRegion.removeAttribute('required');
-            inputCentro.setAttribute('required', 'true');
-            
-            card.style.minHeight = "460px"; 
-        }
+            if (profile === 'master') {
+                loginTitle.innerText = "Iniciar Sesión: Master";
+                labelUsuario.innerText = "Usuario Administrador";
+                inputUsuario.placeholder = "Ingrese código Master";
+                
+                groupRegion.classList.add('d-none');
+                groupCentro.classList.add('d-none');
+                inputRegion.removeAttribute('required');
+                inputCentro.removeAttribute('required');
+                
+                card.style.minHeight = "380px"; 
+            } 
+            else if (profile === 'subregion') {
+                loginTitle.innerText = "Acceso: Sub-Region";
+                labelUsuario.innerText = "Usuario Regional";
+                inputUsuario.placeholder = "Ingrese usuario de sub-región";
+                
+                groupRegion.classList.remove('d-none');
+                groupCentro.classList.add('d-none');
+                inputRegion.setAttribute('required', 'true');
+                inputCentro.removeAttribute('required');
+                
+                card.style.minHeight = "460px"; 
+            } 
+            else if (profile === 'centro') {
+                loginTitle.innerText = "Acceso: Centro Médico";
+                labelUsuario.innerText = "Usuario del Centro";
+                inputUsuario.placeholder = "Ingrese usuario de enfermería";
+                
+                groupRegion.classList.add('d-none');
+                groupCentro.classList.remove('d-none');
+                inputRegion.removeAttribute('required');
+                inputCentro.setAttribute('required', 'true');
+                
+                card.style.minHeight = "460px"; 
+            }
+        });
     });
-});
-        const loginForm = document.getElementById('login');
+
+    // Función auxiliar para mostrar/ocultar mensajes de error estéticos
+    function validarCampo(input, elementoError, mensajePersonalizado = "") {
+        if (!input.hasAttribute('required') && input.closest('.d-none')) {
+            elementoError.style.display = 'none';
+            return true; // Si el campo está oculto y no es requerido, es válido
+        }
+
+        // Validación de vacío
+        if (input.hasAttribute('required') && input.value.trim() === "") {
+            elementoError.innerText = "Este campo es obligatorio.";
+            elementoError.style.display = 'block';
+            return false;
+        }
+
+        // Validación de expresiones regulares (pattern) o longitud mínima
+        if (!input.checkValidity()) {
+            elementoError.innerText = mensajePersonalizado || input.validationMessage;
+            elementoError.style.display = 'block';
+            return false;
+        }
+
+        elementoError.style.display = 'none';
+        return true;
+    }
+
+    // Manejo del formulario
+    const loginForm = document.getElementById('login');
 
     loginForm.addEventListener('submit', (event) => {
-        // Evita que la página intente recargarse y borre los datos antes de tiempo
         event.preventDefault(); 
 
-        // Detecta cuál botón de perfil tiene la clase 'active' actualmente
+        // Ejecutar las validaciones
+        const esUsuarioValido = validarCampo(inputUsuario, document.getElementById('error-usuario'));
+        const esPasswordValido = validarCampo(inputPassword, document.getElementById('error-contraseña'), "La contraseña debe tener al menos 6 caracteres.");
+        const esRegionValida = validarCampo(inputRegion, document.getElementById('error-region'), "El código debe empezar con 'REG-' seguido de letras o números.");
+        const esCentroValido = validarCampo(inputCentro, document.getElementById('error-centro'), "El ID debe empezar con 'HOSP-' seguido únicamente de números.");
+
+        // Si alguna validación falla, detenemos el envío
+        if (!esUsuarioValido || !esPasswordValido || !esRegionValida || !esCentroValido) {
+            return;
+        }
+
+        // Si todo está correcto, proceder al redireccionamiento
         const activeCircle = document.querySelector('.profile-circle.active');
         const activeProfile = activeCircle.getAttribute('data-profile');
 
@@ -479,18 +521,18 @@
             window.location.href = "Master.html";
         } 
         else if (activeProfile === 'subregion') {
-            window.location.href = "sub-region.html";
+            window.location.href = "subregion_dashboard.html";
         } 
         else if (activeProfile === 'centro') {
             window.location.href = "vacuna.html";
         }
     });
 
-const settingsBtn = document.querySelector('.settings-icon');
-settingsBtn.addEventListener('click', () => {
-    alert("El botón de Ajustes, que aun no hago xdd");
-});
-
-    </script>
+    // El botón de ajustes gracioso xdd
+    const settingsBtn = document.querySelector('.settings-icon');
+    settingsBtn.addEventListener('click', () => {
+        alert("El botón de Ajustes, que aun no hago xdd");
+    });
+</script>
 </body>
 </html>
