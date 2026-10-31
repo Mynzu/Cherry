@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Clínico de Vacunación - Venezuela</title>
     
-    <!-- CDN Oficial Completa de Vue 3 -->
+    <!-- Vue.js 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
     <style>
-        /* CSS Reset & Variables Globales */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -32,7 +31,7 @@
             position: relative;
         }
 
-        /* Toast / Notificación Personalizada */
+        /* Toast / Notificación */
         .toast-notification {
             position: fixed;
             top: 24px;
@@ -67,7 +66,6 @@
             justify-content: center;
             padding: 50px;
             border-right: 1px solid rgba(72, 149, 239, 0.15);
-            position: relative;
         }
 
         .sidebar h1 {
@@ -125,7 +123,6 @@
             border-radius: 4px;
             border: 1px solid rgba(72, 149, 239, 0.2);
         }
-        .main-content::-webkit-scrollbar-thumb:hover { background: #3a506b; }
 
         .section-card {
             background-color: #1c2541;
@@ -195,8 +192,24 @@
         .search-results-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px 20px;
+            gap: 8px 20px;
             margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .historial-list {
+            margin-top: 15px;
+            border-top: 1px dashed rgba(72, 149, 239, 0.3);
+            padding-top: 15px;
+        }
+
+        .historial-item {
+            background: rgba(28, 37, 65, 0.7);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #3a86ff;
+            font-size: 0.9rem;
         }
 
         .search-error {
@@ -207,6 +220,9 @@
             border-left: 4px solid #ff0055;
             color: #ffb3c6;
             font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         /* Formulario Grid */
@@ -253,6 +269,52 @@
             color: #ffffff;
         }
 
+        /* Tarjetas de Vacunas Múltiples en la Sesión */
+        .vaccine-session-card {
+            background: rgba(11, 19, 43, 0.6);
+            border: 1px solid rgba(72, 149, 239, 0.25);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .btn-remove-vaccine {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 0, 85, 0.2);
+            color: #ffb3c6;
+            border: 1px solid #ff0055;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .btn-remove-vaccine:hover {
+            background: #ff0055;
+            color: white;
+        }
+
+        .btn-add-more {
+            background: rgba(76, 201, 240, 0.15);
+            color: #4cc9f0;
+            border: 1px dashed #4cc9f0;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+
+        .btn-add-more:hover {
+            background: rgba(76, 201, 240, 0.25);
+        }
+
         .btn-submit {
             grid-column: span 2;
             background: linear-gradient(90deg, #3a86ff, #4cc9f0);
@@ -289,25 +351,25 @@
 
         <!-- Notificación Toast -->
         <div v-if="mensajeNotificacion" class="toast-notification">
-            <span>✨</span>
+            <span></span>
             <span>{{ mensajeNotificacion }}</span>
         </div>
 
         <!-- PANEL IZQUIERDO -->
         <div class="sidebar">
-            <h1>Sistema de Vacunación</h1>
-            <p>Registro oficial de dosis y control de inmunización (PAI y COVID-19 en Venezuela). Mantén el historial actualizado y seguro.</p>
-            <a href="subregion_dashboard.html" class="btn-back">← Volver al Panel</a>
+            <h1>Centro de Vacunación</h1>
+            <p>Registro oficial de dosis múltiples y control de inmunización (PAI y COVID-19 en Venezuela). Gestiona expedientes y añade nuevas vacunas rápidamente.</p>
+            <a href="index.html" class="btn-back">← Volver al Panel</a>
         </div>
 
         <!-- PANEL DERECHO -->
         <div class="main-content">
 
-            <!-- SECCIÓN 1: BUSCADOR -->
+            <!-- SECCIÓN 1: BUSCADOR DE PACIENTES -->
             <div class="section-card">
                 <h2>
-                    <span>Consultar Registro Existente</span>
-                    <span class="badge-count">{{ baseDeDatosVacunas.length }} Registros En Sistema</span>
+                    <span>Consultar o Ampliar Expediente</span>
+                    <span class="badge-count">{{ baseDeDatosPacientes.length }} Pacientes Registrados</span>
                 </h2>
                 
                 <div class="search-box">
@@ -321,53 +383,84 @@
                     <button class="btn-search" type="button" @click="buscarPaciente">Buscar</button>
                 </div>
                 
-                <!-- Resultados de Búsqueda -->
+                <!-- Resultados / Historial Encontrado -->
                 <div v-if="resultadoBusqueda" class="search-results">
-                    <div style="color: #4cc9f0; font-weight: 700; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;">
-                        📋 HISTORIAL CLÍNICO DETECTADO
+                    <div style="color: #4cc9f0; font-weight: 700; margin-bottom: 12px; font-size: 1.1rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span> EXPEDIENTE CLÍNICO ENCONTRADO</span>
+                        <button @click="iniciarAgregarVacunas(resultadoBusqueda)" style="background: #3a86ff; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                             Agregar más vacunas a este paciente
+                        </button>
                     </div>
+
                     <div class="search-results-grid">
-                        <div><strong>Nombre:</strong> {{ resultadoBusqueda.nombre }}</div>
-                        <div><strong>Documento (Cédula):</strong> {{ resultadoBusqueda.dni }}</div>
-                        <div><strong>Vacuna:</strong> {{ resultadoBusqueda.vacuna }}</div>
-                        <div><strong>Dosis:</strong> {{ resultadoBusqueda.dosis }}</div>
-                        <div><strong>Fecha Registro:</strong> {{ resultadoBusqueda.fecha }}</div>
-                        <div><strong>Lote:</strong> {{ resultadoBusqueda.lote || 'N/A' }}</div>
-                        <div class="full-width"><strong>Centro Médico:</strong> {{ resultadoBusqueda.centro }}</div>
-                        <div class="full-width"><strong>Observaciones:</strong> <em>{{ resultadoBusqueda.observaciones || 'Ninguna registrada.' }}</em></div>
+                        <div><strong>Primer Nombre:</strong> {{ resultadoBusqueda.primerNombre }}</div>
+                        <div><strong>Segundo Nombre:</strong> {{ resultadoBusqueda.segundoNombre || 'N/A' }}</div>
+                        <div><strong>Primer Apellido:</strong> {{ resultadoBusqueda.primerApellido }}</div>
+                        <div><strong>Segundo Apellido:</strong> {{ resultadoBusqueda.segundoApellido || 'N/A' }}</div>
+                        <div><strong>Cédula:</strong> {{ resultadoBusqueda.dni }}</div>
+                        <div><strong>Fecha de Nacimiento:</strong> {{ resultadoBusqueda.fechaNacimiento }}</div>
+                    </div>
+
+                    <div class="historial-list">
+                        <strong style="color: #4cc9f0; display: block; margin-bottom: 8px;"> Historial de Vacunas Aplicadas ({{ resultadoBusqueda.vacunas.length }}):</strong>
+                        <div v-for="(vac, idx) in resultadoBusqueda.vacunas" :key="idx" class="historial-item">
+                            <strong>{{ idx + 1 }}. {{ vac.vacuna }}</strong> ({{ vac.dosis }})<br>
+                            <span style="color: #a5b4fc; font-size: 0.85rem;"> Fecha: {{ vac.fecha }} |  Lote: {{ vac.lote || 'N/A' }} |  Centro: {{ vac.centro }}</span>
+                            <div v-if="vac.observaciones" style="font-style: italic; color: #cbd5e1; margin-top: 4px;">Obs: {{ vac.observaciones }}</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Error -->
+                <!-- Error con opción de registrar rápido -->
                 <div v-if="busquedaFallida" class="search-error">
-                    ❌ Advertencia: No se encontraron registros asociados al número de identificación ingresado.
+                    <span> No se encontró ningún registro asociado a la cédula "<strong>{{ searchQuery }}</strong>". Puedes registrarlo abajo llenando sus datos y sus vacunas correspondientes.</span>
+                    <button @click="precargarCedula" style="align-self: flex-start; background: #3a86ff; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                        Usar esta cédula para nuevo registro
+                    </button>
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: FORMULARIO -->
+            <!-- SECCIÓN 2: FORMULARIO DE REGISTRO / ADICIÓN MÚLTIPLE -->
             <div class="section-card">
-                <h2>Anexar Nuevo Registro de Vacuna</h2>
-                <form @submit.prevent="anexarRegistro">
+                <h2>{{ modoEdicion ? ' Añadir Vacunas al Paciente' : ' Registrar Nuevo Paciente' }}</h2>
+                
+                <form @submit.prevent="guardarRegistroMultiple">
                     <div class="form-grid">
                         
+                        <!-- Datos Personales (Solo editables si es nuevo, o bloqueados/referenciados si se agregan vacunas a alguien existente) -->
                         <div class="form-group">
-                            <label>Número de Identificación (Cédula / DNI)</label>
-                            <input type="text" v-model="nuevoPaciente.dni" required placeholder="Ej: V-26543210">
+                            <label>Cédula / DNI</label>
+                            <input type="text" v-model="formPaciente.dni" :disabled="modoEdicion" required placeholder="Ej: V-26543210">
                         </div>
 
-                        <div class="form-group">
-                            <label>Nombre Completo</label>
-                            <input type="text" v-model="nuevoPaciente.nombre" required placeholder="Ej: María Rodríguez">
+                        <div class="form-group" v-if="!modoEdicion">
+                            <label>Primer Nombre</label>
+                            <input type="text" v-model="formPaciente.primerNombre" required placeholder="Ej: María">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" v-if="!modoEdicion">
+                            <label>Segundo Nombre</label>
+                            <input type="text" v-model="formPaciente.segundoNombre" placeholder="Ej: Alejandra">
+                        </div>
+
+                        <div class="form-group" v-if="!modoEdicion">
+                            <label>Primer Apellido</label>
+                            <input type="text" v-model="formPaciente.primerApellido" required placeholder="Ej: Rodríguez">
+                        </div>
+
+                        <div class="form-group" v-if="!modoEdicion">
+                            <label>Segundo Apellido</label>
+                            <input type="text" v-model="formPaciente.segundoApellido" placeholder="Ej: Gómez">
+                        </div>
+
+                        <div class="form-group" v-if="!modoEdicion">
                             <label>Fecha de Nacimiento</label>
-                            <input type="date" v-model="nuevoPaciente.fechaNacimiento" required>
+                            <input type="date" v-model="formPaciente.fechaNacimiento" required>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" v-if="!modoEdicion">
                             <label>Género</label>
-                            <select v-model="nuevoPaciente.genero" required>
+                            <select v-model="formPaciente.genero" required>
                                 <option value="">Selecciona una opción</option>
                                 <option value="M">Masculino</option>
                                 <option value="F">Femenino</option>
@@ -375,68 +468,95 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label>Tipo de Vacuna / Inmunización</label>
-                            <select v-model="nuevoPaciente.vacuna" @change="verificarDosisUnica" required>
-                                <option value="">Selecciona la vacuna aplicada</option>
-                                <optgroup label="Programa Ampliado de Inmunización (PAI - Venezuela)">
-                                    <option value="BCG (Tuberculosis)">BCG (Tuberculosis)</option>
-                                    <option value="Pentavalente (DPT+HepB+Hib)">Pentavalente (DPT + HepB + Hib)</option>
-                                    <option value="Hexavalente">Hexavalente</option>
-                                    <option value="Polio (Oral / IPV)">Polio (Oral / IPV)</option>
-                                    <option value="Toxoide Tetánico-Diftérico (Td)">Toxoide Tetánico-Diftérico (Td)</option>
-                                    <option value="Fiebre Amarilla (Antiamarílica)">Fiebre Amarilla (Antiamarílica)</option>
-                                    <option value="SRP (Sarampión, Rubeola, Parotiditis)">SRP (Sarampión, Rubeola, Parotiditis)</option>
-                                    <option value="SR (Sarampión y Rubeola)">SR (Sarampión y Rubeola)</option>
-                                    <option value="Hepatitis B (Adulto/Pediátrica)">Hepatitis B (Adulto / Pediátrica)</option>
-                                </optgroup>
-                                <optgroup label="Vacunas COVID-19 (Autorizadas en Venezuela)">
-                                    <option value="Sputnik V (Gam-COVID-Vac)">Sputnik V (Gam-COVID-Vac)</option>
-                                    <option value="Sinopharm (BBIBP-CorV)">Sinopharm (BBIBP-CorV)</option>
-                                    <option value="Abdala (CIGB-66)">Abdala (CIGB-66)</option>
-                                    <option value="Verocell / Covilo">Verocell / Covilo</option>
-                                    <option value="Pfizer-BioNTech (Comirnaty)">Pfizer-BioNTech (Comirnaty)</option>
-                                    <option value="AstraZeneca (Vaxzevria)">AstraZeneca (Vaxzevria)</option>
-                                </optgroup>
-                                <option value="Otra / No especificada">Otra / No especificada</option>
-                            </select>
+                        <!-- SECCIÓN DE VACUNAS MÚLTIPLES EN LA SESIÓN -->
+                        <div class="full-width" style="margin-top: 10px;">
+                            <label style="font-size: 1.1rem; color: #4cc9f0; display: block; margin-bottom: 15px; border-bottom: 1px solid rgba(76,201,240,0.3); padding-bottom: 6px;">
+                                 Vacunas a Aplicar en esta Sesión ({{ formVacunas.length }})
+                            </label>
+
+                            <!-- Tarjeta por cada vacuna añadida -->
+                            <div v-for="(vac, index) in formVacunas" :key="index" class="vaccine-session-card">
+                                <button type="button" class="btn-remove-vaccine" @click="removerVacunaForm(index)" v-if="formVacunas.length > 1">
+                                     Quitar
+                                </button>
+                                <strong style="color: #4cc9f0; display: block; margin-bottom: 12px;">Vacuna N° {{ index + 1 }}</strong>
+
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Tipo de Vacuna / Inmunización</label>
+                                        <select v-model="vac.vacuna" @change="verificarDosisUnica(index)" required>
+                                            <option value="">Selecciona la vacuna aplicada</option>
+                                            <optgroup label="Programa Ampliado de Inmunización (PAI)">
+                                                <option value="BCG (Tuberculosis)">BCG (Tuberculosis)</option>
+                                                <option value="Pentavalente (DPT+HepB+Hib)">Pentavalente (DPT + HepB + Hib)</option>
+                                                <option value="Hexavalente">Hexavalente</option>
+                                                <option value="Polio (Oral / IPV)">Polio (Oral / IPV)</option>
+                                                <option value="Toxoide Tetánico-Diftérico (Td)">Toxoide Tetánico-Diftérico (Td)</option>
+                                                <option value="Fiebre Amarilla (Antiamarílica)">Fiebre Amarilla (Antiamarílica)</option>
+                                                <option value="SRP (Sarampión, Rubeola, Parotiditis)">SRP (Sarampión, Rubeola, Parotiditis)</option>
+                                                <option value="SR (Sarampión y Rubeola)">SR (Sarampión y Rubeola)</option>
+                                                <option value="Hepatitis B">Hepatitis B</option>
+                                            </optgroup>
+                                            <optgroup label="Vacunas COVID-19">
+                                                <option value="Sputnik V">Sputnik V</option>
+                                                <option value="Sinopharm">Sinopharm</option>
+                                                <option value="Abdala">Abdala</option>
+                                                <option value="Verocell / Covilo">Verocell / Covilo</option>
+                                                <option value="Pfizer-BioNTech">Pfizer-BioNTech</option>
+                                                <option value="AstraZeneca">AstraZeneca</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Número de Dosis</label>
+                                        <select v-model="vac.dosis" required>
+                                            <option value="">Selecciona la dosis</option>
+                                            <option value="Dosis Única">Dosis Única</option>
+                                            <option value="Primera Dosis">Primera Dosis</option>
+                                            <option value="Segunda Dosis">Segunda Dosis</option>
+                                            <option value="Tercera Dosis">Tercera Dosis</option>
+                                            <option value="Primer Refuerzo">Primer Refuerzo</option>
+                                            <option value="Segundo Refuerzo">Segundo Refuerzo</option>
+                                            <option value="Refuerzo Anual">Refuerzo Anual</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Fecha de Aplicación</label>
+                                        <input type="date" v-model="vac.fecha" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Número de Lote</label>
+                                        <input type="text" v-model="vac.lote" placeholder="Ej: AB-1234">
+                                    </div>
+
+                                    <div class="form-group full-width">
+                                        <label>Centro de Vacunación</label>
+                                        <input type="text" v-model="vac.centro" required placeholder="Ej: Hospital Central de Maracay">
+                                    </div>
+
+                                    <div class="form-group full-width">
+                                        <label>Observaciones Médicas / Reacciones</label>
+                                        <textarea v-model="vac.observaciones" rows="2" placeholder="Alergias o notas..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botón para añadir otra vacuna al formulario -->
+                            <button type="button" class="btn-add-more" @click="agregarFilaVacuna">
+                                 Añadir otra vacuna a este registro simultáneo
+                            </button>
                         </div>
 
-                        <div class="form-group">
-                            <label>Número de Dosis</label>
-                            <select v-model="nuevoPaciente.dosis" required>
-                                <option value="">Selecciona la dosis correspondiente</option>
-                                <option value="Dosis Única">Dosis Única</option>
-                                <option value="Primera Dosis">Primera Dosis</option>
-                                <option value="Segunda Dosis">Segunda Dosis</option>
-                                <option value="Tercera Dosis">Tercera Dosis</option>
-                                <option value="Primer Refuerzo">Primer Refuerzo</option>
-                                <option value="Segundo Refuerzo">Segundo Refuerzo</option>
-                                <option value="Dosis de Refuerzo Anual">Dosis de Refuerzo Anual</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Fecha de Aplicación</label>
-                            <input type="date" v-model="nuevoPaciente.fecha" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Número de Lote</label>
-                            <input type="text" v-model="nuevoPaciente.lote" placeholder="Ej: AB-1234">
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label>Centro de Vacunación / Hospital / Ambulatorio</label>
-                            <input type="text" v-model="nuevoPaciente.centro" required placeholder="Ej: Ambulatorio Urbano Dr. Arístides Malpica">
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label>Observaciones Médicas / Sintomatología</label>
-                            <textarea v-model="nuevoPaciente.observaciones" rows="3" placeholder="Registra alergias, reacciones inmediatas o datos relevantes..."></textarea>
-                        </div>
-
-                        <button type="submit" class="btn-submit">Guardar y Anexar al Registro</button>
+                        <button type="submit" class="btn-submit">
+                            {{ modoEdicion ? ' Guardar y Añadir Vacunas al Expediente' : ' Registrar Paciente y Guardar Vacunas' }}
+                        </button>
+                        
+                        <button type="button" v-if="modoEdicion" @click="cancelarEdicion" style="grid-column: span 2; background: rgba(255,255,255,0.1); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-top: 5px;">
+                            Cancelar / Limpiar
+                        </button>
                     </div>
                 </form>
             </div>
@@ -454,79 +574,75 @@
                 const resultadoBusqueda = ref(null);
                 const busquedaFallida = ref(false);
                 const mensajeNotificacion = ref('');
+                const modoEdicion = ref(false); // true si se le agregan vacunas a alguien existente
 
-                const nuevoPaciente = ref({
+                const formPaciente = ref({
                     dni: '',
-                    nombre: '',
+                    primerNombre: '',
+                    segundoNombre: '',
+                    primerApellido: '',
+                    segundoApellido: '',
                     fechaNacimiento: '',
-                    genero: '',
-                    vacuna: '',
-                    dosis: '',
-                    fecha: '',
-                    lote: '',
-                    centro: '',
-                    observaciones: ''
+                    genero: ''
                 });
+
+                // Lista de vacunas que se agregarán en la sesión actual
+                const formVacunas = ref([
+                    { vacuna: '', dosis: '', fecha: '', lote: '', centro: '', observaciones: '' }
+                ]);
 
                 const datosPorDefecto = [
                     {
                         dni: "V-26543210",
-                        nombre: "María Rodríguez",
+                        primerNombre: "María",
+                        segundoNombre: "Alejandra",
+                        primerApellido: "Rodríguez",
+                        segundoApellido: "Gómez",
                         fechaNacimiento: "1995-06-15",
                         genero: "F",
-                        vacuna: "Toxoide Tetánico-Diftérico (Td)",
-                        dosis: "Primer Refuerzo",
-                        fecha: "2026-01-10",
-                        lote: "TX-9921",
-                        centro: "Hospital Central de Maracay",
-                        observaciones: "Sin reacciones adversas inmediatas."
-                    },
-                    {
-                        dni: "V-18432111",
-                        nombre: "Carlos Pérez",
-                        fechaNacimiento: "1982-11-03",
-                        genero: "M",
-                        vacuna: "Sinopharm (BBIBP-CorV)",
-                        dosis: "Segunda Dosis",
-                        fecha: "2026-03-12",
-                        lote: "SIN-4410",
-                        centro: "Ambulatorio del Norte",
-                        observaciones: "Paciente apto."
+                        vacunas: [
+                            { vacuna: "Toxoide Tetánico-Diftérico (Td)", dosis: "Primer Refuerzo", fecha: "2026-01-10", lote: "TX-9921", centro: "Hospital Central de Maracay", observaciones: "Sin reacciones adversas inmediatas." }
+                        ]
                     }
                 ];
 
-                const baseDeDatosVacunas = ref([]);
+                const baseDeDatosPacientes = ref([]);
 
                 onMounted(() => {
-                    const guardados = localStorage.getItem('registros_vacunacion');
+                    const guardados = localStorage.getItem('registros_vacunacion_multiples');
                     if (guardados) {
                         try {
-                            baseDeDatosVacunas.value = JSON.parse(guardados);
+                            baseDeDatosPacientes.value = JSON.parse(guardados);
                         } catch (e) {
-                            baseDeDatosVacunas.value = datosPorDefecto;
+                            baseDeDatosPacientes.value = datosPorDefecto;
                         }
                     } else {
-                        baseDeDatosVacunas.value = datosPorDefecto;
+                        baseDeDatosPacientes.value = datosPorDefecto;
                         guardarEnStorage();
                     }
                 });
 
                 const guardarEnStorage = () => {
-                    localStorage.setItem('registros_vacunacion', JSON.stringify(baseDeDatosVacunas.value));
+                    localStorage.setItem('registros_vacunacion_multiples', JSON.stringify(baseDeDatosPacientes.value));
                 };
 
                 const mostrarNotificacion = (texto) => {
                     mensajeNotificacion.value = texto;
-                    setTimeout(() => {
-                        mensajeNotificacion.value = '';
-                    }, 3500);
+                    setTimeout(() => { mensajeNotificacion.value = ''; }, 3500);
                 };
 
-                // Asignación automática inteligente para vacunas de dosis única
-                const verificarDosisUnica = () => {
+                const agregarFilaVacuna = () => {
+                    formVacunas.value.push({ vacuna: '', dosis: '', fecha: '', lote: '', centro: '', observaciones: '' });
+                };
+
+                const removerVacunaForm = (index) => {
+                    formVacunas.value.splice(index, 1);
+                };
+
+                const verificarDosisUnica = (index) => {
                     const vacunasUnicas = ['BCG (Tuberculosis)', 'Fiebre Amarilla (Antiamarílica)'];
-                    if (vacunasUnicas.includes(nuevoPaciente.value.vacuna)) {
-                        nuevoPaciente.value.dosis = 'Dosis Única';
+                    if (vacunasUnicas.includes(formVacunas.value[index].vacuna)) {
+                        formVacunas.value[index].dosis = 'Dosis Única';
                     }
                 };
 
@@ -540,11 +656,11 @@
                 const buscarPaciente = () => {
                     const query = searchQuery.value.trim().toLowerCase();
                     if (!query) {
-                        mostrarNotificacion("Por favor, ingresa un número de cédula para buscar.");
+                        mostrarNotificacion("Por favor, ingresa un número de cédula.");
                         return;
                     }
 
-                    const encontrado = baseDeDatosVacunas.value.find(p => p.dni.toString().trim().toLowerCase() === query);
+                    const encontrado = baseDeDatosPacientes.value.find(p => p.dni.toString().trim().toLowerCase() === query);
                     
                     if (encontrado) {
                         resultadoBusqueda.value = encontrado;
@@ -555,56 +671,95 @@
                     }
                 };
 
-                const anexarRegistro = () => {
-                    // Validación de fechas (Fecha de aplicación vs Nacimiento y Futuro)
-                    const fechaNac = new Date(nuevoPaciente.value.fechaNacimiento);
-                    const fechaApp = new Date(nuevoPaciente.value.fecha);
-                    const hoy = new Date();
+                const precargarCedula = () => {
+                    modoEdicion.value = false;
+                    formPaciente.value.dni = searchQuery.value.trim();
+                    busquedaFallida.value = false;
+                    mostrarNotificacion("Cédula cargada para nuevo registro.");
+                };
 
-                    if (fechaApp < fechaNac) {
-                        alert("Error clínico: La fecha de aplicación de la vacuna no puede ser anterior a la fecha de nacimiento del paciente.");
-                        return;
+                const iniciarAgregarVacunas = (paciente) => {
+                    modoEdicion.value = true;
+                    formPaciente.value = {
+                        dni: paciente.dni,
+                        primerNombre: paciente.primerNombre,
+                        segundoNombre: paciente.segundoNombre,
+                        primerApellido: paciente.primerApellido,
+                        segundoApellido: paciente.segundoApellido,
+                        fechaNacimiento: paciente.fechaNacimiento,
+                        genero: paciente.genero
+                    };
+                    formVacunas.value = [{ vacuna: '', dosis: '', fecha: '', lote: '', centro: '', observaciones: '' }];
+                    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    mostrarNotificacion(`Agregando vacunas al expediente de ${paciente.primerNombre} ${paciente.primerApellido}`);
+                };
+
+                const cancelarEdicion = () => {
+                    modoEdicion.value = false;
+                    formPaciente.value = { dni: '', primerNombre: '', segundoNombre: '', primerApellido: '', segundoApellido: '', fechaNacimiento: '', genero: '' };
+                    formVacunas.value = [{ vacuna: '', dosis: '', fecha: '', lote: '', centro: '', observaciones: '' }];
+                };
+
+                const guardarRegistroMultiple = () => {
+                    // Validar fechas
+                    for (let vac of formVacunas.value) {
+                        const fechaNac = new Date(formPaciente.value.fechaNacimiento);
+                        const fechaApp = new Date(vac.fecha);
+                        const hoy = new Date();
+
+                        if (fechaApp < fechaNac) {
+                            alert("Error clínico: La fecha de aplicación no puede ser anterior a la fecha de nacimiento.");
+                            return;
+                        }
+                        if (fechaApp > hoy) {
+                            alert("Error: La fecha de aplicación no puede ser futura.");
+                            return;
+                        }
                     }
 
-                    if (fechaApp > hoy) {
-                        alert("Error: La fecha de aplicación no puede ser una fecha futura.");
-                        return;
-                    }
-
-                    baseDeDatosVacunas.value.unshift({ ...nuevoPaciente.value });
-                    guardarEnStorage();
-
-                    mostrarNotificacion(`¡Registro guardado con éxito para ${nuevoPaciente.value.nombre}!`);
-
-                    if (searchQuery.value.trim() === nuevoPaciente.value.dni.trim()) {
+                    if (modoEdicion.value) {
+                        // Agregar vacunas al paciente existente
+                        const index = baseDeDatosPacientes.value.findIndex(p => p.dni === formPaciente.value.dni);
+                        if (index !== -1) {
+                            baseDeDatosPacientes.value[index].vacunas.push(...formVacunas.value);
+                            guardarEnStorage();
+                            resultadoBusqueda.value = baseDeDatosPacientes.value[index];
+                            mostrarNotificacion(`¡${formVacunas.value.length} nueva(s) vacuna(s) añadida(s) al expediente!`);
+                        }
+                    } else {
+                        // Crear nuevo paciente con su lista de vacunas múltiples
+                        const nuevoReg = {
+                            ...formPaciente.value,
+                            vacunas: [...formVacunas.value]
+                        };
+                        baseDeDatosPacientes.value.unshift(nuevoReg);
+                        guardarEnStorage();
+                        mostrarNotificacion(`¡Paciente registrado con éxito y ${formVacunas.value.length} vacuna(s) guardada(s)!`);
+                        searchQuery.value = nuevoReg.dni;
                         buscarPaciente();
                     }
 
-                    nuevoPaciente.value = {
-                        dni: '',
-                        nombre: '',
-                        fechaNacimiento: '',
-                        genero: '',
-                        vacuna: '',
-                        dosis: '',
-                        fecha: '',
-                        lote: '',
-                        centro: '',
-                        observaciones: ''
-                    };
+                    cancelarEdicion();
                 };
 
                 return {
                     searchQuery,
                     resultadoBusqueda,
                     busquedaFallida,
-                    nuevoPaciente,
-                    baseDeDatosVacunas,
+                    modoEdicion,
+                    formPaciente,
+                    formVacunas,
+                    baseDeDatosPacientes,
                     mensajeNotificacion,
                     buscarPaciente,
                     alCambiarBusqueda,
-                    anexarRegistro,
-                    verificarDosisUnica
+                    precargarCedula,
+                    iniciarAgregarVacunas,
+                    cancelarEdicion,
+                    agregarFilaVacuna,
+                    removerVacunaForm,
+                    verificarDosisUnica,
+                    guardarRegistroMultiple
                 };
             }
         }).mount('#app');

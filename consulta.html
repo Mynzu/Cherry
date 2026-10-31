@@ -32,7 +32,7 @@
         .content-wrapper {
             position: relative;
             z-index: 2;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -41,14 +41,14 @@
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            padding: 10px 20px 30px 20px;
+            padding: 20px;
         }
         
         .top-navbar {
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            width:100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
             padding: 25px 40px;
         }
         
@@ -85,14 +85,14 @@
         }
 
         .custom-card {
-            background-color: rgba(15, 23, 42, 0.55);
+            background-color: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 20px;
-            padding: 25px 30px;
+            padding: 30px 35px;
             width: 100%;
-            max-width: 360px;
+            max-width: 580px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
         .text-card-white {
@@ -100,31 +100,35 @@
             text-align: center;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
         }
-        .mb-3 { 
-            margin-bottom: 20px; 
-        }
 
         .mb-4 { 
-            margin-bottom: 25px; 
+            margin-bottom: 22px; 
+        }
+
+        .form-row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
         }
 
         .form-label {
             display: block;
             color: #ffffff;
             font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
         }
 
         .form-control {
             width: 100%;
-            padding: 12px;
+            padding: 11px 13px;
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.45);
             background: rgba(0, 0, 0, 0.35);
             color: white;
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
         }
         .form-control:focus {
@@ -134,7 +138,7 @@
         }
 
         .form-control::placeholder {
-            color: rgba(255, 255, 255, 0.65) !important;
+            color: rgba(255, 255, 255, 0.6) !important;
         }
 
         .btn-submit {
@@ -148,12 +152,83 @@
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(13, 110, 253, 0.35); 
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             transition: all 0.3s ease;
         }
         .btn-submit:hover {
             background-color: #0b5ed7;
             transform: translateY(-2px);
+        }
+
+        /* Tarjeta de resultado */
+        .result-card {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(13, 110, 253, 0.15);
+            border: 1px solid rgba(13, 110, 253, 0.4);
+            color: #ffffff;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .result-card h3 {
+            color: #38bdf8;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.2);
+            padding-bottom: 6px;
+        }
+
+        /* Contenedor con Scroll para el historial de vacunas */
+        .vaccines-scroll-list {
+            max-height: 320px;
+            overflow-y: auto;
+            margin-top: 12px;
+            padding-right: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .vaccines-scroll-list::-webkit-scrollbar {
+            width: 6px;
+        }
+        .vaccines-scroll-list::-webkit-scrollbar-thumb {
+            background: #0d6efd;
+            border-radius: 4px;
+        }
+
+        .vaccine-item-card {
+            background: rgba(15, 23, 42, 0.7);
+            border-left: 4px solid #38bdf8;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+        }
+
+        .vaccine-title {
+            color: #90e0ef;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .error-card {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         @media (max-width: 600px) {
@@ -175,7 +250,7 @@
 
             .content-wrapper { 
                 height: auto; 
-                padding-bottom: 100px; 
+                padding-bottom: 50px; 
             }
 
             .profile-btn { 
@@ -190,8 +265,11 @@
             .custom-card { 
                 padding: 25px 20px;  
             }
-        }
 
+            .form-row-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -209,23 +287,66 @@
             <div class="custom-card">
                 <div class="text-card-white mb-4">
                     <h2 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 8px;">Consulta de Vacunación</h2>
-                    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Ingrese sus datos</p>
+                    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Ingrese sus datos personales para verificar</p>
                 </div>
 
                 <form id="form-consulta-publica">
-                    <div class="mb-3">
-                        <label for="nombre-consulta" class="form-label">Nombre Completo</label>
-                        <input type="text" id="nombre-consulta" class="form-control" placeholder="Ej: Juan Pérez" required>
+                    <!-- Primer y Segundo Nombre -->
+                    <div class="form-row-grid">
+                        <div>
+                            <label for="primer-nombre" class="form-label">Primer Nombre *</label>
+                            <input type="text" id="primer-nombre" class="form-control" placeholder="Ej: María" required>
+                        </div>
+                        <div>
+                            <label for="segundo-nombre" class="form-label">Segundo Nombre</label>
+                            <input type="text" id="segundo-nombre" class="form-control" placeholder="Ej: Alejandra">
+                        </div>
                     </div>
-    
+
+                    <!-- Primer y Segundo Apellido -->
+                    <div class="form-row-grid">
+                        <div>
+                            <label for="primer-apellido" class="form-label">Primer Apellido *</label>
+                            <input type="text" id="primer-apellido" class="form-control" placeholder="Ej: Rodríguez" required>
+                        </div>
+                        <div>
+                            <label for="segundo-apellido" class="form-label">Segundo Apellido</label>
+                            <input type="text" id="segundo-apellido" class="form-control" placeholder="Ej: Gómez">
+                        </div>
+                    </div>
+
+                    <!-- Cédula -->
                     <div class="mb-4">
-                        <label for="cedula-consulta" class="form-label">Cédula de Identidad</label>
-                        <input type="text" id="cedula-consulta" class="form-control" placeholder="Ej: V-12345678" required>
+                        <label for="cedula-consulta" class="form-label">Cédula de Identidad *</label>
+                        <input type="text" id="cedula-consulta" class="form-control" placeholder="Ej: V-26543210" required>
                     </div>
 
                     <button type="submit" class="btn-submit">Consultar Estado</button>
                     <a href="index.html" class="btn-submit" style="display: block; text-align: center; text-decoration: none; background-color: rgba(255,255,255,0.15); margin-bottom: 0;">Volver al Inicio</a>
                 </form>
+
+                <!-- Ficha del Resultado -->
+                <div id="resultado-card" class="result-card">
+                    <h3> EXPEDIENTE CLÍNICO DE VACUNACIÓN</h3>
+                    
+                    <div style="margin-bottom: 12px; font-size: 0.92rem; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 8px;">
+                        <div><strong>Paciente:</strong> <span id="res-nombre-completo" style="color: #90e0ef;"></span></div>
+                        <div><strong>Cédula:</strong> <span id="res-cedula"></span></div>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong style="color: #38bdf8;"> Historial Completo de Vacunas:</strong>
+                        <span id="res-total-vacunas" style="background: #0d6efd; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;"></span>
+                    </div>
+
+                    <div id="lista-vacunas-container" class="vaccines-scroll-list"></div>
+                </div>
+
+                <!-- Mensaje de Error / Coincidencia Fallida -->
+                <div id="error-card" class="error-card">
+                     <span id="error-texto">No se encontraron registros de vacunación asociados a esta cédula.</span>
+                </div>
+
             </div>
         </div>
     </div>
@@ -233,15 +354,107 @@
     <script>
         const settingsBtn = document.querySelector('.settings-icon');
         settingsBtn.addEventListener('click', () => {
-            alert("aja el boton de ajustes xd");
+            alert("Ajustes del Sistema de Consulta");
         });
 
+        const datosPorDefecto = [
+            {
+                dni: "V-26543210",
+                primerNombre: "María",
+                segundoNombre: "Alejandra",
+                primerApellido: "Rodríguez",
+                segundoApellido: "Gómez",
+                vacunas: [
+                    { vacuna: "Toxoide Tetánico-Diftérico (Td)", dosis: "Primer Refuerzo", fecha: "2026-01-10", lote: "TX-9921", centro: "Hospital Central de Maracay", observaciones: "Sin reacciones adversas inmediatas." },
+                    { vacuna: "Fiebre Amarilla (Antiamarílica)", dosis: "Dosis Única", fecha: "2025-05-18", lote: "FA-5512", centro: "Ambulatorio del Norte", observaciones: "Paciente inmunizado." }
+                ]
+            }
+        ];
+
         const formConsulta = document.getElementById('form-consulta-publica');
+        const resCard = document.getElementById('resultado-card');
+        const errCard = document.getElementById('error-card');
+        const errorTexto = document.getElementById('error-texto');
+        const listaVacunasContainer = document.getElementById('lista-vacunas-container');
+
         formConsulta.addEventListener('submit', (e) => {
             e.preventDefault();
-            const nombreUsuario = document.getElementById('nombre-consulta').value;
-            const cedulaUsuario = document.getElementById('cedula-consulta').value;
-            alert(`Enviando a Base de Datos... \nNombre: ${nombreUsuario} \nCédula: ${cedulaUsuario}`);
+            
+            const cedulaIngresada = document.getElementById('cedula-consulta').value.trim().toLowerCase();
+            const pNombreIngresado = document.getElementById('primer-nombre').value.trim().toLowerCase();
+            const sNombreIngresado = document.getElementById('segundo-nombre').value.trim().toLowerCase();
+            const pApellidoIngresado = document.getElementById('primer-apellido').value.trim().toLowerCase();
+            const sApellidoIngresado = document.getElementById('segundo-apellido').value.trim().toLowerCase();
+
+            // Cargar base de datos compartida
+            let baseDatos = JSON.parse(localStorage.getItem('registros_vacunacion_multiples')) || datosPorDefecto;
+
+            // 1. Buscar si la cédula existe en el sistema
+            const registroEncontrado = baseDatos.find(item => item.dni.toString().trim().toLowerCase() === cedulaIngresada);
+
+            if (!registroEncontrado) {
+                resCard.style.display = 'none';
+                errorTexto.textContent = `No se encontró ningún registro de vacunación asociado a la cédula "${cedulaIngresada}".`;
+                errCard.style.display = 'block';
+                return;
+            }
+
+            // 2. Validar que los nombres y apellidos coincidan exactamente con los registrados
+            const dbPNombre = (registroEncontrado.primerNombre || "").trim().toLowerCase();
+            const dbSNombre = (registroEncontrado.segundoNombre || "").trim().toLowerCase();
+            const dbPApellido = (registroEncontrado.primerApellido || "").trim().toLowerCase();
+            const dbSApellido = (registroEncontrado.segundoApellido || "").trim().toLowerCase();
+
+            const coincidePNombre = (pNombreIngresado === dbPNombre);
+            const coincideSNombre = (sNombreIngresado === dbSNombre);
+            const coincidePApellido = (pApellidoIngresado === dbPApellido);
+            const coincideSApellido = (sApellidoIngresado === dbSApellido);
+
+            if (!coincidePNombre || !coincideSNombre || !coincidePApellido || !coincideSApellido) {
+                resCard.style.display = 'none';
+                errorTexto.innerHTML = `<strong>Error de Validación:</strong> Los datos personales ingresados no coinciden con los registros oficiales asociados a la cédula <strong>${registroEncontrado.dni}</strong>. Verifique sus nombres y apellidos.`;
+                errCard.style.display = 'block';
+                return;
+            }
+
+            // 3. Si todo coincide, mostrar el expediente completo
+            const nombreCompleto = `${registroEncontrado.primerNombre} ${registroEncontrado.segundoNombre || ''} ${registroEncontrado.primerApellido} ${registroEncontrado.segundoApellido || ''}`.trim();
+            
+            document.getElementById('res-nombre-completo').textContent = nombreCompleto;
+            document.getElementById('res-cedula').textContent = registroEncontrado.dni;
+
+            const vacunas = registroEncontrado.vacunas || [];
+            document.getElementById('res-total-vacunas').textContent = `${vacunas.length} Registradas`;
+
+            listaVacunasContainer.innerHTML = '';
+
+            if (vacunas.length > 0) {
+                const vacunasOrdenadas = [...vacunas].reverse();
+
+                vacunasOrdenadas.forEach((vac) => {
+                    const itemCard = document.createElement('div');
+                    itemCard.className = 'vaccine-item-card';
+
+                    itemCard.innerHTML = `
+                        <div class="vaccine-title">
+                            <span> ${vac.vacuna}</span>
+                            <span style="font-size: 0.8rem; background: rgba(56, 189, 248, 0.2); color: #38bdf8; padding: 2px 8px; border-radius: 6px;">${vac.dosis}</span>
+                        </div>
+                        <div style="margin-top: 6px; color: #e2e8f0;">
+                             <strong>Fecha:</strong> ${vac.fecha} |  <strong>Lote:</strong> ${vac.lote || 'N/A'}<br>
+                             <strong>Centro:</strong> ${vac.centro}<br>
+                            ${vac.observaciones ? `<em style="color: #a5b4fc; font-size: 0.83rem;">Obs: ${vac.observaciones}</em>` : ''}
+                        </div>
+                    `;
+
+                    listaVacunasContainer.appendChild(itemCard);
+                });
+            } else {
+                listaVacunasContainer.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.6); padding: 10px;">No posee dosis registradas hasta la fecha.</div>';
+            }
+
+            errCard.style.display = 'none';
+            resCard.style.display = 'block';
         });
     </script>
 </body>

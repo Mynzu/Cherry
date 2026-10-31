@@ -216,6 +216,13 @@
             color: rgba(200, 225, 245, 0.35);
         }
 
+        /* Grid de nombres en dos columnas para aprovechar el ancho */
+        .form-row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
         .submit-btn {
             width: 100%;
             padding: 12px;
@@ -244,7 +251,7 @@
 <body>
 
     <div id="app">
-        <!-- Fondo animado/imagen -->
+        <!-- Fondo -->
         <div class="bg-gif-container">
             <img src="fondo.gif" alt="Fondo interactivo">
         </div>
@@ -292,14 +299,14 @@
                     </form>
                 </div>
 
-                <!-- Modificar Datos -->
+                <!-- Modificar Datos (Esquema de 2 nombres y 2 apellidos) -->
                 <div v-if="seccionActual === 'modificar'" class="form-section">
                     <h2>Modificar Datos de Personal</h2>
 
                     <form v-if="!personaEncontrada" @submit.prevent="buscarPersona">
                         <div class="input-group">
                             <label for="buscarRegistro">Ingrese su cédula o código para buscar</label>
-                            <input id="buscarRegistro" v-model="busquedaInput" type="text" placeholder="Ingrese Cédula o Código (Ej: 12345)" required>
+                            <input id="buscarRegistro" v-model="busquedaInput" type="text" placeholder="Ingrese Cédula o Código (Ej: V-26543210)" required>
                         </div>
                         <button type="submit" class="submit-btn">Buscar en el Sistema</button>
                     </form>
@@ -309,9 +316,26 @@
                             Registro encontrado. Modifique los campos necesarios:
                         </p>
 
-                        <div class="input-group">
-                            <label>Nombre Completo</label>
-                            <input v-model="personaSeleccionada.nombre" type="text" required>
+                        <div class="form-row-grid">
+                            <div class="input-group">
+                                <label>Primer Nombre</label>
+                                <input v-model="personaSeleccionada.primerNombre" type="text" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Segundo Nombre</label>
+                                <input v-model="personaSeleccionada.segundoNombre" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-row-grid">
+                            <div class="input-group">
+                                <label>Primer Apellido</label>
+                                <input v-model="personaSeleccionada.primerApellido" type="text" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Segundo Apellido</label>
+                                <input v-model="personaSeleccionada.segundoApellido" type="text">
+                            </div>
                         </div>
 
                         <div class="input-group">
@@ -386,7 +410,7 @@
                         <input type="text" v-model="filtroBitacora" placeholder="🔍 Buscar por usuario, fecha o acción...">
                     </div>
 
-                    <!-- Lista filtrada de la bitácora -->
+                    <!-- Lista filtrada -->
                     <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px; max-height: 270px; overflow-y: auto; font-size: 0.82rem; display: flex; flex-direction: column; gap: 8px;">
                         <div v-for="(item, index) in bitacoraFiltrada" :key="index" style="padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);">
                             <strong style="color: #90e0ef;">[{{ item.fecha }}]</strong> - <span style="color: #ffb703;">{{ item.usuario }}</span>: {{ item.accion }}
@@ -417,7 +441,10 @@
                 const busquedaInput = ref('');
                 const personaEncontrada = ref(false);
                 const personaSeleccionada = ref({
-                    nombre: '',
+                    primerNombre: '',
+                    segundoNombre: '',
+                    primerApellido: '',
+                    segundoApellido: '',
                     cedula: '',
                     area: '',
                     estado: ''
@@ -427,9 +454,9 @@
                 const filtroBitacora = ref('');
                 const bitacoraList = ref([
                     { fecha: '26/10/2026 - 15:42', usuario: 'Master (REG-ARAGUA)', accion: 'Inicio de sesión Master en sistema' },
-                    { fecha: '26/10/2026 - 14:15', usuario: 'Keynner Lopez', accion: 'Modificación de datos de personal' },
+                    { fecha: '26/10/2026 - 14:15', usuario: 'Keynner Alejandro Lopez Perez', accion: 'Modificación de datos de personal' },
                     { fecha: '26/10/2026 - 12:30', usuario: 'Administrador', accion: 'Envío de notificación por correo institucional' },
-                    { fecha: '25/10/2026 - 09:10', usuario: 'Maria Rodriguez', accion: 'Actualización de esquema de vacunación' }
+                    { fecha: '25/10/2026 - 09:10', usuario: 'Maria Sofia Rodriguez Gomez', accion: 'Actualización de esquema de vacunación' }
                 ]);
 
                 const bitacoraFiltrada = computed(() => {
@@ -443,8 +470,12 @@
                 });
 
                 const buscarPersona = () => {
+                    // Datos de ejemplo desglosados al buscar
                     personaSeleccionada.value = {
-                        nombre: 'Keynner Lopez',
+                        primerNombre: 'Keynner',
+                        segundoNombre: 'Alejandro',
+                        primerApellido: 'Lopez',
+                        segundoApellido: 'Perez',
                         cedula: busquedaInput.value,
                         area: 'Emergencia - Central',
                         estado: 'Activo'
@@ -453,7 +484,8 @@
                 };
 
                 const guardarModificacion = () => {
-                    alert(`¡Datos de ${personaSeleccionada.value.nombre} actualizados con éxito por el Master!`);
+                    const nombreCompleto = `${personaSeleccionada.value.primerNombre} ${personaSeleccionada.value.primerApellido}`;
+                    alert(`¡Datos de ${nombreCompleto} actualizados con éxito por el Master!`);
                     personaEncontrada.value = false;
                     busquedaInput.value = '';
                 };
