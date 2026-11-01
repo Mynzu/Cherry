@@ -173,6 +173,7 @@
             font-size: 1.5rem;
             margin-bottom: 15px;
             background: linear-gradient(90deg, #ffffff, #90e0ef);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -216,13 +217,6 @@
             color: rgba(200, 225, 245, 0.35);
         }
 
-        /* Grid de nombres en dos columnas para aprovechar el ancho */
-        .form-row-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
         .submit-btn {
             width: 100%;
             padding: 12px;
@@ -251,7 +245,7 @@
 <body>
 
     <div id="app">
-        <!-- Fondo -->
+        <!-- Fondo animado/imagen -->
         <div class="bg-gif-container">
             <img src="fondo.gif" alt="Fondo interactivo">
         </div>
@@ -280,8 +274,20 @@
                     <h2>Master</h2>
                     <form @submit.prevent="procesarFormulario('Ingresar Master')">
                         <div class="input-group">
-                            <label for="usuario">Usuario Administrador</label>
-                            <input id="usuario" v-model="formIngresar.usuario" type="text" placeholder="Ingrese código Master" required>
+                            <label for="usuario">Primer Nombre</label>
+                            <input id="usuario" v-model="formIngresar.primerNombre" type="text" placeholder="Ingrese su primer nombre" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="segundoNombre">Segundo Nombre</label>
+                            <input id="segundoNombre" v-model="formIngresar.segundoNombre" type="text" placeholder="Ingrese su segundo nombre" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="primerApellido">Primer Apellido</label>
+                            <input id="primerApellido" v-model="formIngresar.primerApellido" type="text" placeholder="Ingrese su primer apellido" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="segundoApellido">Segundo Apellido</label>
+                            <input id="segundoApellido" v-model="formIngresar.segundoApellido" type="text" placeholder="Ingrese su segundo apellido" required>
                         </div>
                         <div class="input-group">
                             <label for="region">Código Regional</label>
@@ -299,14 +305,14 @@
                     </form>
                 </div>
 
-                <!-- Modificar Datos (Esquema de 2 nombres y 2 apellidos) -->
+                <!-- Modificar Datos -->
                 <div v-if="seccionActual === 'modificar'" class="form-section">
                     <h2>Modificar Datos de Personal</h2>
 
                     <form v-if="!personaEncontrada" @submit.prevent="buscarPersona">
                         <div class="input-group">
                             <label for="buscarRegistro">Ingrese su cédula o código para buscar</label>
-                            <input id="buscarRegistro" v-model="busquedaInput" type="text" placeholder="Ingrese Cédula o Código (Ej: V-26543210)" required>
+                            <input id="buscarRegistro" v-model="busquedaInput" type="text" placeholder="Ingrese Cédula o Código (Ej: 12345)" required>
                         </div>
                         <button type="submit" class="submit-btn">Buscar en el Sistema</button>
                     </form>
@@ -316,26 +322,24 @@
                             Registro encontrado. Modifique los campos necesarios:
                         </p>
 
-                        <div class="form-row-grid">
-                            <div class="input-group">
-                                <label>Primer Nombre</label>
-                                <input v-model="personaSeleccionada.primerNombre" type="text" required>
-                            </div>
-                            <div class="input-group">
-                                <label>Segundo Nombre</label>
-                                <input v-model="personaSeleccionada.segundoNombre" type="text">
-                            </div>
+                        <div class="input-group">
+                            <label>Primer Nombre</label>
+                            <input v-model="personaSeleccionada.primerNombre" type="text" required>
                         </div>
 
-                        <div class="form-row-grid">
-                            <div class="input-group">
-                                <label>Primer Apellido</label>
-                                <input v-model="personaSeleccionada.primerApellido" type="text" required>
-                            </div>
-                            <div class="input-group">
-                                <label>Segundo Apellido</label>
-                                <input v-model="personaSeleccionada.segundoApellido" type="text">
-                            </div>
+                        <div class="input-group">
+                            <label>Segundo Nombre</label>
+                            <input v-model="personaSeleccionada.segundoNombre" type="text" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Primer Apellido</label>
+                            <input v-model="personaSeleccionada.primerApellido" type="text" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Segundo Apellido</label>
+                            <input v-model="personaSeleccionada.segundoApellido" type="text" required>
                         </div>
 
                         <div class="input-group">
@@ -363,9 +367,25 @@
                     <h2>Transferir Personal</h2>
                     <form @submit.prevent="procesarFormulario('Transferir')">
                         <div class="input-group">
-                            <label for="nombrePersona">Nombre / ID de la Persona</label>
-                            <input id="nombrePersona" v-model="formTransferir.persona" type="text" placeholder="Ej. Juan Pérez" required>
+                            <label for="nombrePersona">Primer Nombre</label>
+                            <input id="nombrePersona" v-model="formTransferir.primerNombre" type="text" placeholder="Ej. Keybert" required>
                         </div>
+
+                        <div class="input-group">
+                            <label for="segundoNombre">Segundo Nombre</label>
+                            <input id="segundoNombre" v-model="formTransferir.segundoNombre" type="text" placeholder="Ej. Miguel" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="primerApellido">Primer Apellido</label>
+                            <input id="primerApellido" v-model="formTransferir.primerApellido" type="text" placeholder="Ej. Lopez" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="segundoApellido">Segundo Apellido</label>
+                            <input id="segundoApellido" v-model="formTransferir.segundoApellido" type="text" placeholder="Ej. Heredia" required>
+                        </div>
+
                         <div class="input-group">
                             <label for="origen">Área de Origen</label>
                             <input id="origen" v-model="formTransferir.origen" type="text" placeholder="Ej. Departamento A" required>
@@ -410,7 +430,7 @@
                         <input type="text" v-model="filtroBitacora" placeholder="🔍 Buscar por usuario, fecha o acción...">
                     </div>
 
-                    <!-- Lista filtrada -->
+                    <!-- Lista filtrada de la bitácora -->
                     <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 10px; max-height: 270px; overflow-y: auto; font-size: 0.82rem; display: flex; flex-direction: column; gap: 8px;">
                         <div v-for="(item, index) in bitacoraFiltrada" :key="index" style="padding: 8px; border-bottom: 1px solid rgba(255,255,255,0.08);">
                             <strong style="color: #90e0ef;">[{{ item.fecha }}]</strong> - <span style="color: #ffb703;">{{ item.usuario }}</span>: {{ item.accion }}
@@ -434,8 +454,23 @@
             setup() {
                 const seccionActual = ref('ingresar');
 
-                const formIngresar = ref({ usuario: '', region: '', centro: '', password: '' });
-                const formTransferir = ref({ persona: '', origen: '', destino: '' });
+                const formIngresar = ref({
+                     primerNombre: '', 
+                     segundoNombre: '',
+                     primerApellido: '', 
+                     segundoApellido: '',
+                     region: '',
+                     centro: '',
+                    password: '' 
+                });
+
+                const formTransferir = ref({ 
+                    primerNombre: '', 
+                    segundoNombre: '', 
+                    primerApellido: '',
+                    segundoApellido: '',
+                    origen: '', 
+                    destino: '' });
                 const formCorreo = ref({ email: '', asunto: '' });
 
                 const busquedaInput = ref('');
@@ -454,9 +489,9 @@
                 const filtroBitacora = ref('');
                 const bitacoraList = ref([
                     { fecha: '26/10/2026 - 15:42', usuario: 'Master (REG-ARAGUA)', accion: 'Inicio de sesión Master en sistema' },
-                    { fecha: '26/10/2026 - 14:15', usuario: 'Keynner Alejandro Lopez Perez', accion: 'Modificación de datos de personal' },
+                    { fecha: '26/10/2026 - 14:15', usuario: 'Keynner Miguel Lopez Heredia', accion: 'Modificación de datos de personal' },
                     { fecha: '26/10/2026 - 12:30', usuario: 'Administrador', accion: 'Envío de notificación por correo institucional' },
-                    { fecha: '25/10/2026 - 09:10', usuario: 'Maria Sofia Rodriguez Gomez', accion: 'Actualización de esquema de vacunación' }
+                    { fecha: '25/10/2026 - 09:10', usuario: 'Karlys Daniela Rada Heredia', accion: 'Actualización de esquema de vacunación' }
                 ]);
 
                 const bitacoraFiltrada = computed(() => {
@@ -470,12 +505,11 @@
                 });
 
                 const buscarPersona = () => {
-                    // Datos de ejemplo desglosados al buscar
                     personaSeleccionada.value = {
                         primerNombre: 'Keynner',
-                        segundoNombre: 'Alejandro',
+                        segundoNombre: 'Miguel',
                         primerApellido: 'Lopez',
-                        segundoApellido: 'Perez',
+                        segundoApellido: 'Heredia',
                         cedula: busquedaInput.value,
                         area: 'Emergencia - Central',
                         estado: 'Activo'
@@ -484,8 +518,7 @@
                 };
 
                 const guardarModificacion = () => {
-                    const nombreCompleto = `${personaSeleccionada.value.primerNombre} ${personaSeleccionada.value.primerApellido}`;
-                    alert(`¡Datos de ${nombreCompleto} actualizados con éxito por el Master!`);
+                    alert(`¡Datos de ${personaSeleccionada.value.primerNombre} ${personaSeleccionada.value.segundoNombre} ${personaSeleccionada.value.primerApellido} ${personaSeleccionada.value.segundoApellido} actualizados con éxito por el Master!`);
                     personaEncontrada.value = false;
                     busquedaInput.value = '';
                 };

@@ -14,7 +14,7 @@
 
         body {
             background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
-                        url('Fondo3.avif') no-repeat center center fixed;
+                url('Fondo3.avif') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
             min-height: 100vh;
@@ -22,45 +22,41 @@
             flex-direction: column;
         }
 
-        /* Header Limpio y Consistente */
+        /* Header */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 40px;
-            background: rgba(15, 23, 42, 0.85);
+            padding: 18px 40px;
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-brand {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: bold;
-            color: #38bdf8;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-volver {
-            display: inline-flex;
+            display: flex;
+            gap: 25px;
             align-items: center;
-            gap: 8px;
-            color: #ff9999;
-            text-decoration: none;
-            border: 1px solid rgba(255, 107, 107, 0.4);
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            background: rgba(255, 107, 107, 0.1);
-            backdrop-filter: blur(4px);
         }
 
-        .btn-volver:hover {
-            background: rgba(255, 107, 107, 0.25);
-            border-color: rgba(255, 107, 107, 0.8);
-            color: #ffffff;
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+        .nav-brand span {
+            opacity: 0.6;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-brand span.active {
+            opacity: 1;
+            color: #38bdf8;
+            border-bottom: 2px solid #38bdf8;
+            padding-bottom: 4px;
+        }
+
+        .user-info {
+            font-size: 14px;
+            opacity: 0.85;
         }
 
         /* Container */
@@ -73,7 +69,7 @@
         }
 
         .dashboard-card {
-            background: rgba(23, 30, 43, 0.88);
+            background: rgba(23, 30, 43, 0.85);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 16px;
@@ -81,7 +77,6 @@
             max-width: 900px;
             padding: 35px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-            text-align: center;
         }
 
         h2 {
@@ -90,24 +85,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 12px;
             color: #f8fafc;
-        }
-
-        .evaluator-badge {
-            background: rgba(56, 189, 248, 0.08);
-            border: 1px solid rgba(56, 189, 248, 0.25);
-            padding: 10px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 13px;
-            color: #cbd5e1;
-        }
-
-        .evaluator-badge strong {
-            color: #38bdf8;
         }
 
         /* Controls */
@@ -140,7 +117,6 @@
             margin: 20px 0 12px 0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            text-align: center;
         }
 
         /* Search Box */
@@ -174,33 +150,15 @@
 
         .btn-search:hover { background: #2563eb; }
 
-        /* Patient Card con nuevo esquema formal desglosado */
+        /* Patient Card */
         .patient-card {
             background: rgba(255, 255, 255, 0.05);
             border-left: 4px solid #38bdf8;
-            padding: 16px 20px;
+            padding: 15px;
             border-radius: 6px;
             margin-bottom: 20px;
             font-size: 14px;
             display: none;
-            text-align: left;
-        }
-
-        .patient-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
-            font-size: 13px;
-        }
-
-        .patient-field-title {
-            color: #38bdf8;
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
         }
 
         /* Exams Grid */
@@ -217,7 +175,6 @@
             border-radius: 10px;
             padding: 16px;
             transition: 0.3s;
-            text-align: left;
         }
 
         .exam-header {
@@ -324,7 +281,6 @@
             font-size: 14px;
             display: none;
             line-height: 1.6;
-            text-align: left;
         }
 
         .alert-warning {
@@ -380,24 +336,22 @@
 
     <header>
         <div class="nav-brand">
-            Panel de Evaluación - Sub-Región Sanitaria
+            <span>Master</span>
+            <span class="active">Sub-Región (Evaluación)</span>
+            <span>Centro Vacunación</span>
         </div>
-        <div>
-            <a href="index.html" class="btn-volver">← Volver al Inicio</a>
+        <div class="user-info">
+             <a href="index.html" style="color: #38bdf8; text-decoration: none; margin-left: 10px;">Cerrar Sesión</a>
         </div>
     </header>
 
     <main>
-        <div class="dashboard-card">
+        <div class="dashboard-card"style="text-align: center;">
             <h2>Evaluación y Verificación Sanitaria</h2>
-
-            <div class="evaluator-badge">
-                <span> Médico Evaluador en Turno:</span> <strong>Dr. Daniel Franco</strong>
-            </div>
 
             <!-- Modo Simulación -->
             <div class="demo-controls">
-                <span> <strong>Modo Simulación (Estado de Vacunas):</strong></span>
+                <strong>Estado de Vacunas:</strong>
                 <select id="simulacionBD">
                     <option value="completo">Paciente con vacunas al día</option>
                     <option value="incompleto">Paciente con vacunas faltantes</option>
@@ -410,35 +364,15 @@
                 <button class="btn-search" onclick="buscarPaciente()">Buscar Paciente</button>
             </div>
 
-            <!-- Ficha del Paciente con Desglose de 2 Nombres y 2 Apellidos -->
+            <!-- Ficha del Paciente -->
             <div id="patientCard" class="patient-card">
-                <div>
-                    <strong>Cédula:</strong> <span id="cedulaPaciente">V-26.543.210</span> | 
-                    <strong>Estado en BD:</strong> <span id="estadoVacunasBD" style="color: #38bdf8; font-weight: bold;">Verificado</span>
-                </div>
-                
-                <div class="patient-grid">
-                    <div>
-                        <div class="patient-field-title">Primer Nombre</div>
-                        <span id="pNombre">María</span>
-                    </div>
-                    <div>
-                        <div class="patient-field-title">Segundo Nombre</div>
-                        <span id="sNombre">Alejandra</span>
-                    </div>
-                    <div>
-                        <div class="patient-field-title">Primer Apellido</div>
-                        <span id="pApellido">Rodríguez</span>
-                    </div>
-                    <div>
-                        <div class="patient-field-title">Segundo Apellido</div>
-                        <span id="sApellido">Gómez</span>
-                    </div>
-                </div>
+                <strong>Paciente:</strong> <span id="nombrePaciente">María Rodríguez</span> | 
+                <strong>Cédula:</strong> <span id="cedulaPaciente">V-26.543.210</span> | 
+                <strong>Estado en el sistema:</strong> <span id="estadoVacunasBD" style="color: #38bdf8; font-weight: bold;">Verificado</span>
             </div>
 
-            <!-- Exámenes Médicos -->
-            <div class="section-title">Validación de Exámenes y Evaluación Médica</div>
+            <!-- Exámenes Médicos con Evaluación de Aptitud -->
+            <div class="section-title"style="text-align: center;">Validación de Exámenes y Evaluación Médica</div>
             <div class="exams-grid">
                 
                 <!-- Examen 1 -->
@@ -530,31 +464,36 @@
             <!-- Botón Procesar -->
             <button class="btn-process" onclick="procesarSolicitud()">Procesar Certificado de Salud</button>
 
-            <!-- Alertas -->
+            <!-- Alerta Validación Incompleta (Exámenes sin marcar) -->
             <div id="alertIncomplete" class="alert-box alert-warning">
                  <strong>Revisión Incompleta:</strong> Debe verificar y marcar las casillas correspondientes a los 4 exámenes médicos requeridos antes de poder procesar la solicitud.
             </div>
 
+            <!-- Alerta Datos del Doctor Incompletos (Prevención Exámenes Fantasma) -->
             <div id="alertDoctorData" class="alert-box alert-warning">
                  <strong>Datos Profesionales Incompletos (Antifraude):</strong><br>
                 Para evitar el registro de exámenes sin respaldo legal o "exámenes fantasma", debe ingresar obligatoriamente el <strong>Nombre del Especialista Emisor</strong> y su <strong>N° de Colegiado/Matrícula</strong> en los exámenes seleccionados:
                 <ul id="listaExamenesSinDatos" style="margin-top: 8px; padding-left: 20px; font-weight: bold;"></ul>
             </div>
 
+            <!-- Alerta Éxito -->
             <div id="alertSuccess" class="alert-box alert-success">
                  <strong>¡Certificado Aprobado y Generado!</strong><br>
                 El paciente fue diagnosticado como <strong>APTO</strong> en la totalidad de sus exámenes clínicos y posee su esquema de vacunación al día en el sistema. El certificado ha sido enviado a su correo electrónico.
             </div>
 
+            <!-- Alerta Unificada de Rechazo (Exámenes + Vacunas) -->
             <div id="alertGlobalDanger" class="alert-box alert-danger">
                  <strong>Solicitud de Certificado de Salud Rechazada</strong><br>
                 El sistema no pudo procesar la emisión del certificado de salud debido a los siguientes motivos registrados:
 
+                <!-- Bloque Exámenes No Aptos -->
                 <div id="sectionExamRejection" class="rejection-section" style="display: none;">
                     <h4> Exámenes Físicos Diagnosticados como NO APTO:</h4>
                     <ul id="listaRechazosExamenes" class="rejection-list"></ul>
                 </div>
 
+                <!-- Bloque Vacunas Faltantes -->
                 <div id="sectionVaccineRejection" class="rejection-section" style="display: none;">
                     <h4> Esquema de Inmunización Pendiente en BD:</h4>
                     <ul class="rejection-list">
@@ -615,6 +554,7 @@
         function procesarSolicitud() {
             ocultarAlertas();
 
+            // Configuración de los 4 exámenes y sus campos de credenciales
             const examenes = [
                 { id: 'checkLab', emisorId: 'emisorLab', colegiadoId: 'colegiadoLab', statusId: 'statusLab', obsId: 'obsLab', nombre: 'Laboratorio (VDRL / Heces)' },
                 { id: 'checkTorax', emisorId: 'emisorTorax', colegiadoId: 'colegiadoTorax', statusId: 'statusTorax', obsId: 'obsTorax', nombre: 'Rayos X de Tórax' },
@@ -622,6 +562,7 @@
                 { id: 'checkFisico', emisorId: 'emisorFisico', colegiadoId: 'colegiadoFisico', statusId: 'statusFisico', obsId: 'obsFisico', nombre: 'Examen Físico General' }
             ];
 
+            // 1. VALIDACIÓN 1: Verificar que las 4 casillas estén marcadas
             const checkboxes = document.querySelectorAll('.exam-checkbox');
             let marcados = 0;
             checkboxes.forEach(cb => { if(cb.checked) marcados++; });
@@ -631,6 +572,7 @@
                 return;
             }
 
+            // 2. VALIDACIÓN 2 (NUEVA - ANTIFRAUDE): Verificar credenciales del médico emisor en cada examen marcado
             let examenesSinDatosDoctor = [];
 
             examenes.forEach(exam => {
@@ -656,6 +598,7 @@
                 return;
             }
 
+            // 3. VALIDACIÓN 3: Verificar diagnósticos de No Apto y observaciones
             let examenesNoAptos = [];
             let faltaObservacion = false;
 
@@ -679,9 +622,11 @@
                 return;
             }
 
+            // 4. VALIDACIÓN 4: Estado de Vacunas
             const simulacionBD = document.getElementById('simulacionBD').value;
             const tieneVacunasFaltantes = (simulacionBD === 'incompleto');
 
+            // 5. DECISIÓN FINAL
             if (examenesNoAptos.length > 0 || tieneVacunasFaltantes) {
                 const secExam = document.getElementById('sectionExamRejection');
                 const secVaccine = document.getElementById('sectionVaccineRejection');
