@@ -1,0 +1,321 @@
+* {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        /* ps aqui es la fuente y los margenes para que cuadre con diseño de los navegadores web */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+
+    body {
+        /* el gif de fondo que coloque */
+        background-image: url('fondo.gif');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .video-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* esto es para que se vea mas oscurito, y todo, practicamente donde lo edito dentro de la pagina xd */
+        background-color: rgba(10, 25, 47, 0.65);
+        z-index: 1;
+    }
+
+    .content-wrapper {
+        position: relative;
+        z-index: 2;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        /* es lo que contiene toda la pagina web, digamos que es muy amiga de los margenes de arriba */
+    }
+
+
+    .top-navbar {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 30px;
+        width: 100%;
+        padding: 25px 40px;
+        /* esto es para las trees barritas que le colocamos en la esquina */
+    }
+
+    .settings-icon {
+        color: #ffffff;
+        font-size: 2rem;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+    }
+
+    .circle-container {
+        display: flex;
+        gap: 25px;
+        align-items: center;
+        /* mi parte fav, pero mas dificil de hacer, los botones de arriba */
+    }
+
+    .profile-circle {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: 'Segoe UI', system-ui, sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        padding: 5px 2px;
+        transition: all 0.3s ease;
+        display: inline-block;
+        /* esto tambien va con lo de profile-btn, pero es que esto me frego la vida ps */
+    }
+
+    .profile-circle.active, .profile-circle:hover {
+        color: #ffffff !important;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        border-bottom: 3px solid #0d6efd;
+        /* esto es para cuando pasas el mouse o dejas activo el boton, que brille y se ponga la rayita azul abajo */
+    }
+
+    .profile-circle:not(:last-child)::after {
+        content: "|";
+        color: rgba(255, 255, 255, 0.3);
+        margin-left: 25px;
+        display: inline-block;
+        pointer-events: none;
+        text-shadow: none;
+        /* el separador de palito "|" entre cada boton, para que no se peguen */
+    }
+
+    .center-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        padding: 20px 40px 40px 40px;
+        /* esta caja es para centrar todo lo que va en el medio de la pantalla */
+    }
+
+    .main-dashboard {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 50px;
+        width: 100%;
+        max-width: 1050px;
+        align-items: center;
+         /* el panel principal donde se acomodan los cuadros de la pagina */ 
+    }
+
+    .dashboard-left {
+        flex: 1;
+        min-width: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;  
+        margin-top: -60px; 
+        /* el lado izquierdo, le puse el margen negativo para subirlo un poco y cuadre con el login */
+    }
+
+    .interactive-drawing-card {
+        background-color: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 20px;            
+        width: 100%;
+        max-width: 360px;         
+        text-align: center;
+        color: white;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        /* la tarjeta del certificado compacta para que no ocupe tanto espacio */
+    }
+
+    .dashboard-right {
+        flex: 1;
+        min-width: 380px;         
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;  
+        margin-top: -110px;       
+        /* subimos el login bastante para pegarlo mas a la barra de arriba */
+    }
+    .custom-card {
+        background-color: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 380px;
+        min-height: 440px;        
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+        /* tamaño fijo para que la tarjeta del login no se mueva feo al cambiar de perfil */
+    }
+
+    .dashboard-left {
+        flex: 1;
+        min-width: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;  
+        margin-top: -40px;        
+        /* subimos un poquito el certificado para que quede alineado con lo demas */
+    }
+
+    .custom-card {
+        background-color: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 20px;
+        padding: 30px;
+        width: 100%;
+        max-width: 380px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        
+        min-height: 380px; 
+        transition: min-height 0.3s ease-in-out; 
+        
+        display: flex;
+        flex-direction: column;
+        /* animacion fluida para cuando cambie de tamaño segun los datos */
+    }
+
+    #login {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: space-between; 
+        /* acomoda los inputs y botones limpios y bien distribuidos */
+    }
+
+
+    .text-card-white {
+        color: #ffffff !important;
+        text-align: center;
+        /* centramos el texto blanco de las tarjetas */
+    }
+
+    
+    .mb-3 { 
+        margin-bottom: 12px; 
+    } 
+    /*esto crea espacios de interliniado por asi decirlo*/
+    .mb-4 { 
+        margin-bottom: 16px; 
+    } 
+
+    .form-label {
+        display: block;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        margin-bottom: 6px;
+        font-size: 0.9rem;
+        /* los textos de los titulos de cada input */
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 10px 12px; 
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.5); 
+        background: rgba(0, 0, 0, 0.3);             
+        color: white;
+        font-size: 0.95rem;
+        outline: none;
+        /* estilo para las cajitas de texto donde el usuario escribe */
+    }   
+
+    /* Esto hace que el texto de ejemplo dentro de los inputs sea más blanco */
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.65) !important;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 11px; 
+        background-color: #0d6efd;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        /* el boton azul de enviar con su sombrita */
+    }
+    .btn-submit:hover {
+        background-color: #0b5ed7;
+        transform: translateY(-2px);
+        /* efecto para que el boton suba un poquito cuando le pasas el mouse */
+    }
+    .register-redirect {
+        text-align: center;
+        color: #ffffff;
+        font-size: 0.9rem;
+        /* el texto de abajo, la contraseña y eso*/
+    }
+
+    .register-redirect a:hover {
+        color: #0d6efd;
+        text-decoration: underline;
+        /* rayita abajo cuando pasas el mouse por el link */
+    }
+
+    .mb-3, .mb-4 {
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        /* los margenes con animacion para que no se mueva tosco */
+    }
+    .d-none {
+        display: none !important;
+        /* truco para ocultar cosas de la pantalla por completo */
+    }
+
+    @media (max-width: 768px) {
+        .top-navbar { 
+            flex-direction: column; 
+            align-items: flex-start;
+            gap: 15px; 
+            padding: 15px 20px; 
+        }
+
+        .circle-container { 
+            flex-wrap: wrap; 
+        }
+
+        .center-container { 
+            padding: 10px 20px 40px 20px; 
+            margin-top: 0; 
+        }
+
+        .main-dashboard { 
+            flex-direction: column; 
+            gap: 35px; 
+        }
+
+        .custom-card { 
+            max-width: 100%; 
+        }
+        /* aca acomodamos todo para que en telefonos se vea en vertical y no se rompa el diseño */
+    }
