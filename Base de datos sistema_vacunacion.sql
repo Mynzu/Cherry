@@ -6,27 +6,16 @@
 -- Tiempo de generación: 19-10-2026 a las 15:57:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
-
---
 -- Base de datos: `sistema_vacunacion`
---
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `centros_salud`
 --
-
 CREATE TABLE `centros_salud` (
   `id` int(11) NOT NULL,
   `codigo_centro` varchar(20) NOT NULL,
@@ -41,11 +30,8 @@ CREATE TABLE `centros_salud` (
   `subregion` tinyint(1) DEFAULT 0,
   `centro_vacunacion` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Volcado de datos para la tabla `centros_salud`
---
-
 INSERT INTO `centros_salud` (`id`, `codigo_centro`, `nombre_centro`, `tipo_centro`, `estado`, `municipio`, `correo_contacto`, `contrasena`, `fecha_creacion`, `master`, `subregion`, `centro_vacunacion`) VALUES
 (1, 'MIN-CENTRAL', 'Ministerio del Poder Popular para la Salud (Sede Central)', 'Ministerio', 'Distrito Capital', 'Libertador', 'min.salud@mpps.gob.ve', '$2y$10$e9hHj...mockhash...', '2026-10-18 02:32:25', 1, 0, 0),
 (2, 'ARAGUA-001', 'Hospital Central de Maracay', 'Hospital', 'Aragua', 'Girardot', 'hcm.aragua@mpps.gob.ve', '$2y$10$mockhash1...', '2026-10-18 02:32:25', 0, 0, 1),
@@ -73,13 +59,9 @@ INSERT INTO `centros_salud` (`id`, `codigo_centro`, `nombre_centro`, `tipo_centr
 (24, 'MIRANDA-003', 'CDI Petare', 'CDI', 'Miranda', 'Sucre', 'cdi.petare@mpps.gob.ve', '$2y$10$mockhash23...', '2026-10-18 02:32:25', 0, 0, 1),
 (25, 'MIRANDA-004', 'CDI El Llanito', 'CDI', 'Miranda', 'Sucre', 'cdi.ellanito@mpps.gob.ve', '$2y$10$mockhash24...', '2026-10-18 02:32:25', 0, 0, 1),
 (26, 'MIRANDA-005', 'Hospital Dr. Osío de Cúa', 'Hospital', 'Miranda', 'Urdaneta', 'h.osio@mpps.gob.ve', '$2y$10$mockhash25...', '2026-10-18 02:32:25', 0, 0, 1);
-
 -- --------------------------------------------------------
-
 --
 -- Estructura de tabla para la tabla `dosis_aplicadas`
---
-
 CREATE TABLE `dosis_aplicadas` (
   `id` int(11) NOT NULL,
   `paciente_id` int(11) NOT NULL,
@@ -90,23 +72,16 @@ CREATE TABLE `dosis_aplicadas` (
   `fecha_aplicacion` timestamp NOT NULL DEFAULT current_timestamp(),
   `observaciones` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 --
 -- Volcado de datos para la tabla `dosis_aplicadas`
 --
-
 INSERT INTO `dosis_aplicadas` (`id`, `paciente_id`, `vacuna_id`, `centro_salud_id`, `numero_dosis`, `lote_vacuna`, `fecha_aplicacion`, `observaciones`) VALUES
 (1, 1, 17, 2, 1, 'LOT-COVID-2026-A1', '2026-10-18 02:37:51', 'Sin reacciones secundarias observadas.'),
 (2, 1, 17, 2, 2, 'LOT-COVID-2026-B2', '2026-10-18 02:37:51', 'Segunda dosis completada.'),
 (3, 2, 1, 3, 1, 'LOT-BCG-9981', '2026-10-18 02:37:51', 'Dosis de recién nacido/infantil aplicada en el brazo izquierdo.'),
 (4, 3, 9, 7, 1, 'LOT-FA-5542', '2026-10-18 02:37:51', 'Vacuna de Fiebre Amarilla aplicada para viaje.');
-
--- --------------------------------------------------------
-
 --
 -- Estructura de tabla para la tabla `pacientes`
---
-
 CREATE TABLE `pacientes` (
   `id` int(11) NOT NULL,
   `ci` varchar(20) NOT NULL,
@@ -118,11 +93,7 @@ CREATE TABLE `pacientes` (
   `direccion` text DEFAULT NULL,
   `fecha_registro` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
 -- Volcado de datos para la tabla `pacientes`
---
-
 INSERT INTO `pacientes` (`id`, `ci`, `nombre`, `apellido`, `fecha_nacimiento`, `genero`, `telefono`, `direccion`, `fecha_registro`) VALUES
 (1, 'V-18234567', 'Carlos', 'Mendoza', '1988-04-12', 'Masculino', '0414-1234567', 'Urb. Las Delicias, Calle 3, Casa 12, Maracay, Aragua', '2026-10-18 02:34:55'),
 (2, 'V-20123890', 'Maria', 'Fernandez', '1992-08-25', 'Femenino', '0424-2345678', 'Av. Bolivar, Edif. Centro, Apt 4B, Maracay, Aragua', '2026-10-18 02:34:55'),
@@ -138,29 +109,7 @@ INSERT INTO `pacientes` (`id`, `ci`, `nombre`, `apellido`, `fecha_nacimiento`, `
 (12, 'V-24567890', 'Sofia', 'Vasquez', '1996-05-09', 'Femenino', '0416-2233445', 'Urb. Base Aragua, Maracay, Aragua', '2026-10-18 02:34:55'),
 (13, 'V-16890123', 'Manuel', 'Alvarez', '1984-08-20', 'Masculino', '0414-3344556', 'Valle de la Pascua, Sector Centro, Guarico', '2026-10-18 02:34:55'),
 (14, 'V-27345678', 'Camila', 'Contreras', '1999-11-12', 'Femenino', '0424-4455667', 'El Vigia, Barrio Buenos Aires, Merida', '2026-10-18 02:34:55'),
-(15, 'V-14567890', 'Francisco', 'Gutierez', '1980-03-04', 'Masculino', '0412-5566778', 'Puerto Cabello, Urb. Rancho Grande, Carabobo', '2026-10-18 02:34:55'),
-(16, 'V-29012345', 'Valeria', 'Navarro', '2001-07-19', 'Femenino', '0416-6677889', 'Guatire, Urb. Castillejo, Miranda', '2026-10-18 02:34:55'),
-(17, 'V-13234567', 'Antonio', 'Romero', '1978-09-30', 'Masculino', '0414-7788990', 'Cagua, Sector Corinsa, Aragua', '2026-10-18 02:34:55'),
-(18, 'V-30123456', 'Andrea', 'Delgado', '2002-12-01', 'Femenino', '0424-8899001', 'San Mateo, Calle Bolivar, Aragua', '2026-10-18 02:34:55'),
-(19, 'V-12456789', 'Miguel', 'Suarez', '1976-04-16', 'Masculino', '0412-9900112', 'Zaraza, Sector El Carmen, Guarico', '2026-10-18 02:34:55'),
-(20, 'V-21890123', 'Isabella', 'Blanco', '1993-01-27', 'Femenino', '0416-0011223', 'Ejido, Sector Manzano Bajo, Merida', '2026-10-18 02:34:55'),
-(21, 'V-25123456', 'Alejandro', 'Gil', '1996-08-08', 'Masculino', '0414-1133557', 'Naguanagua, Urb. La Granja, Carabobo', '2026-10-18 02:34:55'),
-(22, 'V-19890123', 'Gabriela', 'Rios', '1991-02-11', 'Femenino', '0424-2244668', 'Charallave, Sector La Estrella, Miranda', '2026-10-18 02:34:55'),
-(23, 'V-27890123', 'Javier', 'Sanchez', '1999-06-03', 'Masculino', '0412-3355779', 'Maracay, Urb. La Soledad, Aragua', '2026-10-18 02:34:55'),
-(24, 'V-22678901', 'Natalia', 'Pineda', '1994-09-21', 'Femenino', '0416-4466880', 'Altagracia de Orituco, Guarico', '2026-10-18 02:34:55'),
-(25, 'V-18567890', 'Diego', 'Ascanio', '1989-12-14', 'Masculino', '0414-5577991', 'Tovar, Sector El Llano, Merida', '2026-10-18 02:34:55'),
-(26, 'V-23890123', 'Mariana', 'Cordero', '1995-03-31', 'Femenino', '0424-6688002', 'Guacara, Urb. Ciudad Alianza, Carabobo', '2026-10-18 02:34:55'),
-(27, 'V-20567890', 'Fernando', 'Medina', '1992-10-07', 'Masculino', '0412-7799013', 'San Antonio de los Altos, Miranda', '2026-10-18 02:34:55'),
-(28, 'V-31234567', 'Lucia', 'Acosta', '2003-05-23', 'Femenino', '0416-8800124', 'La Victoria, Sector Las Mercedes, Aragua', '2026-10-18 02:34:55'),
-(29, 'V-17234567', 'Ricardo', 'Padrón', '1985-01-09', 'Masculino', '0414-9911235', 'San Sebastian de los Reyes, Aragua', '2026-10-18 02:34:55'),
-(30, 'V-24890123', 'Veronica', 'Mora', '1996-11-17', 'Femenino', '0424-0022346', 'Guarenas, Urb. Nueva Casarapa, Miranda', '2026-10-18 02:34:55');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `vacunas`
---
-
 CREATE TABLE `vacunas` (
   `id` int(11) NOT NULL,
   `nombre` varchar(100) NOT NULL,
@@ -171,10 +120,7 @@ CREATE TABLE `vacunas` (
   `via_administracion` varchar(50) DEFAULT NULL,
   `disponibilidad_pai` varchar(30) DEFAULT 'Público'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
 -- Volcado de datos para la tabla `vacunas`
---
 
 INSERT INTO `vacunas` (`id`, `nombre`, `tipo_vacuna`, `enfermedad_previene`, `dosis_requeridas`, `edad_minima_meses`, `via_administracion`, `disponibilidad_pai`) VALUES
 (1, 'BCG', 'Bacteriana viva atenuada', 'Tuberculosis meningínea y miliar', 1, 0, 'Intradérmica', 'Público'),
@@ -195,11 +141,8 @@ INSERT INTO `vacunas` (`id`, `nombre`, `tipo_vacuna`, `enfermedad_previene`, `do
 (16, 'Anti-Meningocócica (ACWY)', 'Bacteriana conjugada', 'Meningitis por Neisseria meningitidis', 1, 9, 'Intramuscular', 'Privado'),
 (17, 'COVID-19 (Sinopharm / Vero Cell)', 'Viral inactivada', 'COVID-19', 2, 36, 'Intramuscular', 'Público'),
 (18, 'COVID-19 (Sputnik V / Light)', 'Vector viral', 'COVID-19', 2, 216, 'Intramuscular', 'Público');
-
 --
 -- Índices para tablas volcadas
---
-
 --
 -- Indices de la tabla `centros_salud`
 --
@@ -207,8 +150,6 @@ ALTER TABLE `centros_salud`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `codigo_centro` (`codigo_centro`),
   ADD UNIQUE KEY `correo_contacto` (`correo_contacto`);
-
---
 -- Indices de la tabla `dosis_aplicadas`
 --
 ALTER TABLE `dosis_aplicadas`
@@ -216,50 +157,42 @@ ALTER TABLE `dosis_aplicadas`
   ADD KEY `fk_dosis_paciente` (`paciente_id`),
   ADD KEY `fk_dosis_vacuna` (`vacuna_id`),
   ADD KEY `fk_dosis_centro` (`centro_salud_id`);
-
 --
--- Indices de la tabla `pacientes`
+-- Indices de la tabla `paciente
 --
 ALTER TABLE `pacientes`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `ci` (`ci`);
-
 --
 -- Indices de la tabla `vacunas`
 --
 ALTER TABLE `vacunas`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nombre` (`nombre`);
-
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
 --
 -- AUTO_INCREMENT de la tabla `centros_salud`
 --
 ALTER TABLE `centros_salud`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-
 --
 -- AUTO_INCREMENT de la tabla `dosis_aplicadas`
 --
 ALTER TABLE `dosis_aplicadas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 --
 -- AUTO_INCREMENT de la tabla `pacientes`
 --
 ALTER TABLE `pacientes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
---
 -- AUTO_INCREMENT de la tabla `vacunas`
 --
 ALTER TABLE `vacunas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
---
 -- Restricciones para tablas volcadas
 --
 
