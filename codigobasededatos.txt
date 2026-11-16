@@ -1,0 +1,247 @@
+
+CREATE TABLE estados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE municipios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    estado_id INT NOT NULL,
+    FOREIGN KEY (estado_id) REFERENCES estados(id) ON DELETE CASCADE
+);
+
+CREATE TABLE parroquias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    municipio_id INT NOT NULL,
+    FOREIGN KEY (municipio_id) REFERENCES municipios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE subregiones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo_region VARCHAR(50) UNIQUE NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    estado_id INT NOT NULL,
+    FOREIGN KEY (estado_id) REFERENCES estados(id) ON DELETE CASCADE
+);
+
+CREATE TABLE centros_salud (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_centro VARCHAR(50) UNIQUE NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
+    parroquia_id INT NOT NULL,
+    FOREIGN KEY (parroquia_id) REFERENCES parroquias(id) ON DELETE CASCADE
+);
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(100) UNIQUE NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
+    rol ENUM('master', 'subregion', 'centro') NOT NULL,
+    subregion_id INT NULL,
+    centro_salud_id INT NULL,
+    FOREIGN KEY (subregion_id) REFERENCES subregiones(id) ON DELETE SET NULL,
+    FOREIGN KEY (centro_salud_id) REFERENCES centros_salud(id) ON DELETE SET NULL
+);
+
+CREATE TABLE personas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    primer_nombre VARCHAR(50) NOT NULL,
+    segundo_nombre VARCHAR(50),
+    primer_apellido VARCHAR(50) NOT NULL,
+    segundo_apellido VARCHAR(50),
+    cedula VARCHAR(20) UNIQUE NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    genero ENUM('M', 'F', 'O') NOT NULL,
+    parroquia_id INT,
+    FOREIGN KEY (parroquia_id) REFERENCES parroquias(id) ON DELETE SET NULL
+);
+
+CREATE TABLE vacunas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    dosis_requeridas INT DEFAULT 1
+);
+
+CREATE TABLE dosis_aplicadas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    persona_id INT NOT NULL,
+    vacuna_id INT NOT NULL,
+    dosis VARCHAR(50) NOT NULL, 
+    fecha DATE NOT NULL,
+    lote VARCHAR(50),
+    centro_salud_id INT,
+    usuario_registra INT, 
+    observaciones TEXT,
+    FOREIGN KEY (persona_id) REFERENCES personas(id) ON DELETE CASCADE,
+    FOREIGN KEY (vacuna_id) REFERENCES vacunas(id) ON DELETE CASCADE,
+    FOREIGN KEY (centro_salud_id) REFERENCES centros_salud(id) ON DELETE SET NULL,
+    FOREIGN KEY (usuario_registra) REFERENCES usuarios(id) ON DELETE SET NULL
+);
+
+CREATE TABLE examenes_salud (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    persona_id INT NOT NULL,
+    tipo_examen VARCHAR(100) NOT NULL,
+    estatus ENUM('apto', 'no_apto') NOT NULL,
+    especialista VARCHAR(150) NOT NULL,
+    observaciones TEXT,
+    usuario_registra INT,
+    FOREIGN KEY (persona_id) REFERENCES personas(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_registra) REFERENCES usuarios(id) ON DELETE SET NULL
+);
+
+CREATE TABLE revisiones_examenes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    examen_id INT NOT NULL,
+    usuario_revisa_id INT NOT NULL,
+    comentario_revision TEXT,
+    fecha_revision DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (examen_id) REFERENCES examenes_salud(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_revisa_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE certificados_salud (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    persona_id INT NOT NULL,
+    usuario_emite_id INT NOT NULL,
+    fecha_emision DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado_certificado VARCHAR(50) DEFAULT 'Aprobado',
+    FOREIGN KEY (persona_id) REFERENCES personas(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_emite_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE bitacora (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    usuario_nombre VARCHAR(100),
+    accion TEXT NOT NULL,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
+);
+
+
+INSERT INTO estados (id, nombre) VALUES
+(1, 'Distrito Capital'),
+(2, 'Aragua'),
+(3, 'Guárico'),
+(4, 'Mérida'),
+(5, 'Carabobo'),
+(6, 'Miranda');
+
+INSERT INTO municipios (id, nombre, estado_id) VALUES
+(1, 'Libertador', 1),
+(2, 'Girardot', 2),
+(3, 'José Félix Ribas', 2),
+(4, 'Sucre', 2),
+(5, 'Juan Germán Roscio', 3),
+(6, 'Infante', 3),
+(7, 'Las Mercedes', 3),
+(8, 'Julián Mellado', 3),
+(9, 'Alberto Adriani', 4),
+(10, 'Campo Elías', 4),
+(11, 'Valencia', 5),
+(12, 'Puerto Cabello', 5),
+(13, 'Guaicaipuro', 6),
+(14, 'Zamora', 6),
+(15, 'Urdaneta', 6);
+
+INSERT INTO parroquias (id, nombre, municipio_id) VALUES
+(1, 'Catedral (Caracas)', 1),
+(2, 'Las Delicias', 2),
+(3, 'Madre María de San José', 2),
+(4, 'Zuata', 3),
+(5, 'Cagua', 3),
+(6, 'Belesino', 4),
+(7, 'San Juan de los Morros', 5),
+(8, 'El Socorro (Guárico)', 6),
+(9, 'Las Mercedes del Llano', 7),
+(10, 'El Sombrero', 8),
+(11, 'Rómulo Gallegos', 9),
+(12, 'Fernández Peña', 10),
+(13, 'Candelaria (Valencia)', 11),
+(14, 'Koene', 12),
+(15, 'Los Teques', 13),
+(16, 'Guatire', 14),
+(17, 'Cúa', 15);
+
+INSERT INTO subregiones (id, codigo_region, nombre, estado_id) VALUES
+(1, 'REG-CAPITAL', 'Subregión Eje Capital', 1),
+(2, 'REG-ARAGUA', 'Subregión Eje Aragua', 2),
+(3, 'REG-GUARICO', 'Subregión Eje Guárico', 3),
+(4, 'REG-MERIDA', 'Subregión Eje Andes', 4),
+(5, 'REG-CARABOBO', 'Subregión Eje Carabobo', 5),
+(6, 'REG-MIRANDA', 'Subregión Eje Miranda', 6);
+
+INSERT INTO centros_salud (id, id_centro, nombre, parroquia_id) VALUES
+(1, 'MIN-CENTRAL', 'Ministerio del Poder Popular para la Salud (Sede Central)', 1),
+(2, 'ARAGUA-001', 'Hospital Central de Maracay', 2),
+(3, 'ARAGUA-002', 'CDI La Aduana', 3),
+(4, 'ARAGUA-003', 'Hospital Dr. José María Benítez', 4),
+(5, 'ARAGUA-004', 'CDI San José', 2),
+(6, 'ARAGUA-005', 'Hospital Dr. José Rangel', 6),
+(7, 'GUARICO-001', 'Hospital Dr. Israel Ranuárez Balza', 7),
+(8, 'GUARICO-002', 'Hospital Dr. Rafael Zamora Arévalo', 8),
+(9, 'GUARICO-003', 'CDI Las Mercedes del Llano', 9),
+(10, 'GUARICO-004', 'CDI El Sombrero', 10),
+(11, 'GUARICO-005', 'Hospital Dr. Francisco Urdaneta Delgado', 8),
+(12, 'MERIDA-001', 'Instituto Autónomo Hospital Universitario de los Andes (IAHULA)', 11),
+(13, 'MERIDA-002', 'Hospital II Sor Juana Inés de la Cruz', 11),
+(14, 'MERIDA-003', 'CDI Los Curos', 11),
+(15, 'MERIDA-004', 'Hospital San José de El Vigía', 11),
+(16, 'MERIDA-005', 'CDI Don Perucho', 12),
+(17, 'CARABOBO-001', 'Ciudad Hospitalaria Dr. Enrique Tejera (CHET)', 13),
+(18, 'CARABOBO-002', 'Hospital Dr. Adolfo Prince Lara', 14),
+(19, 'CARABOBO-003', 'CDI La Isabelica', 13),
+(20, 'CARABOBO-004', 'Hospital Maternidad del Sur', 13),
+(21, 'CARABOBO-005', 'CDI El Socorro', 13),
+(22, 'MIRANDA-001', 'Hospital Dr. Victorino Santaella Ruiz', 15),
+(23, 'MIRANDA-002', 'Hospital General de Guatire Dr. Eugenio P. D Bellard', 16),
+(24, 'MIRANDA-003', 'CDI Petare', 15),
+(25, 'MIRANDA-004', 'CDI El Llanito', 15),
+(26, 'MIRANDA-005', 'Hospital Dr. Osío de Cúa', 17);
+
+INSERT INTO usuarios (id, usuario, contrasena, rol, region, centro, subregion_id, centro_salud_id) VALUES
+(1, 'master_admin', '$2y$10$mockhashmaster', 'master', NULL, NULL, NULL, 1),
+(2, 'REG-ARAGUA', '$2y$10$mockhashreg', 'subregion', 'REG-ARAGUA', NULL, 2, NULL),
+(3, 'HOSP-001', '$2y$10$mockhashcentro', 'centro', NULL, 'ARAGUA-001', NULL, 2);
+
+INSERT INTO personas (id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, cedula, fecha_nacimiento, genero, telefono, direccion, parroquia_id) VALUES
+(1, 'Carlos', '', 'Mendoza', '', 'V-18234567', '1988-04-12', 'M', '0414-1234567', 'Urb. Las Delicias, Calle 3, Casa 12, Maracay, Aragua', 2),
+(2, 'Maria', '', 'Fernandez', '', 'V-20123890', '1992-08-25', 'F', '0424-2345678', 'Av. Bolivar, Edif. Centro, Apt 4B, Maracay, Aragua', 2),
+(3, 'Jose', '', 'Rodriguez', '', 'V-15678234', '1982-11-03', 'M', '0412-3456789', 'Barrio El Carmen, Sector 2, San Juan de los Morros, Guarico', 7),
+(4, 'Ana', '', 'Gomez', '', 'V-23456789', '1995-02-14', 'F', '0416-4567890', 'Urb. Ricosa, Av. Principal, Casa 45, Calabozo, Guarico', 8),
+(5, 'Luis', '', 'Hernandez', '', 'V-25890123', '1997-06-30', 'M', '0414-5678901', 'Sector Los Curos, Calle 5, Merida, Merida', 11),
+(6, 'Patricia', '', 'Perez', '', 'V-19345678', '1990-09-18', 'F', '0424-6789012', 'Av. Don Tulio, Res. El Parque, Merida, Merida', 11),
+(7, 'Gabriel', '', 'Torres', '', 'V-21456123', '1993-12-05', 'M', '0412-7890123', 'Urb. Prebo, Calle 130, Valencia, Carabobo', 13),
+(8, 'Daniela', '', 'Rojas', '', 'V-26789012', '1998-03-22', 'F', '0416-8901234', 'Sector La Isabelica, Bloque 12, Valencia, Carabobo', 13),
+(9, 'Roberto', '', 'Castillo', '', 'V-17890234', '1986-07-10', 'M', '0414-9012345', 'Av. Bermudez, Los Teques, Miranda', 15),
+(10, 'Elena', '', 'Morales', '', 'V-22345890', '1994-10-28', 'F', '0424-0123456', 'Urb. La Urbina, Calle 2, Caracas, Miranda', 1),
+(11, 'Jesus', '', 'Silva', '', 'V-28123456', '2000-01-15', 'M', '0412-1122334', 'Sector Turmero, Centro, Aragua', 4),
+(12, 'Sofia', '', 'Vasquez', '', 'V-24567890', '1996-05-09', 'F', '0416-2233445', 'Urb. Base Aragua, Maracay, Aragua', 2),
+(13, 'Manuel', '', 'Alvarez', '', 'V-16890123', '1984-08-20', 'M', '0414-3344556', 'Valle de la Pascua, Sector Centro, Guarico', 8),
+(14, 'Camila', '', 'Contreras', '', 'V-27345678', '1999-11-12', 'F', '0424-4455667', 'El Vigia, Barrio Buenos Aires, Merida', 11);
+
+INSERT INTO vacunas (id, nombre, tipo_vacuna, enfermedad_previene, dosis_requeridas) VALUES
+(1, 'BCG (Tuberculosis)', 'PAI', 'Tuberculosis meningínea y miliar', 1),
+(2, 'Pentavalente (DPT+HepB+Hib)', 'PAI', 'Difteria, Tétanos, Tosferina, Hepatitis B, Hib', 3),
+(3, 'Hexavalente', 'PAI', 'Difteria, Tétanos, Tosferina, HepB, Hib, Polio', 3),
+(4, 'Polio (Oral / IPV)', 'PAI', 'Poliomielitis', 3),
+(5, 'Toxoide Tetánico-Diftérico (Td)', 'PAI', 'Tétanos y Difteria', 5),
+(6, 'Fiebre Amarilla (Antiamarílica)', 'PAI', 'Fiebre Amarilla', 1),
+(7, 'SRP (Sarampión, Rubeola, Parotiditis)', 'PAI', 'Sarampión, Rubeola y Parotiditis', 2),
+(8, 'SR (Sarampión y Rubeola)', 'PAI', 'Sarampión y Rubeola', 2),
+(9, 'Hepatitis B', 'PAI', 'Infección por virus de la Hepatitis B', 3),
+(10, 'Sputnik V', 'COVID-19', 'COVID-19', 2),
+(11, 'Sinopharm', 'COVID-19', 'COVID-19', 2),
+(12, 'Abdala', 'COVID-19', 'COVID-19', 3),
+(13, 'Verocell / Covilo', 'COVID-19', 'COVID-19', 2),
+(14, 'Pfizer-BioNTech', 'COVID-19', 'COVID-19', 2),
+(15, 'AstraZeneca', 'COVID-19', 'COVID-19', 2);
+
+INSERT INTO dosis_aplicadas (id, persona_id, vacuna_id, centro_salud_id, dosis, fecha, lote, usuario_registra, observaciones) VALUES
+(1, 1, 10, 2, 'Primera Dosis', '2026-10-18', 'LOT-COVID-2026-A1', 3, 'Sin reacciones secundarias observadas.'),
+(2, 1, 10, 2, 'Segunda Dosis', '2026-10-18', 'LOT-COVID-2026-B2', 3, 'Segunda dosis completada.'),
+(3, 2, 1, 3, 'Dosis Única', '2026-10-18', 'LOT-BCG-9981', 3, 'Dosis de recién nacido/infantil aplicada en el brazo izquierdo.'),
+(4, 3, 6, 7, 'Dosis Única', '2026-10-18', 'LOT-FA-5542', 3, 'Vacuna de Fiebre Amarilla aplicada para viaje.');
