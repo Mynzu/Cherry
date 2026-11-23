@@ -2,19 +2,43 @@ const conexion = require("../conexion");
 
 module.exports = {
 
-    insertar(primerNombre, segundoNombre, primerApellido, segundoApellido, region, centro, password) {
+    // Insertar un usuario en la tabla real 'usuarios'
+    insertar(usuario, contrasena, rol, subregionId = null, centroSaludId = null) {
         return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO usuarios (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, region, centro, password) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-            conexion.query(sql, [primerNombre, segundoNombre, primerApellido, segundoApellido, region, centro, password], (err, resultados) => {
-                if (err) reject(err);
-                else resolve(resultados.insertId);
-            });
+            const sql = `
+                INSERT INTO usuarios (usuario, contrasena, rol, subregion_id, centro_salud_id)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+            conexion.query(
+                sql,
+                [usuario, contrasena, rol, subregionId || null, centroSaludId || null],
+                (err, resultados) => {
+                    if (err) reject(err);
+                    else resolve(resultados.insertId);
+                }
+            );
         });
     },
 
+    // Obtener todos los usuarios con su subregión y centro de salud
     obtener() {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, region, centro FROM usuarios`;
+            const sql = `
+                SELECT
+                    u.id,
+                    u.usuario,
+                    u.rol,
+                    u.subregion_id,
+                    s.codigo_region,
+                    s.nombre AS nombre_subregion,
+                    u.centro_salud_id,
+                    c.id_centro,
+                    c.nombre AS nombre_centro
+                FROM usuarios u
+                LEFT JOIN subregiones s ON u.subregion_id = s.id
+                LEFT JOIN centros_salud c ON u.centro_salud_id = c.id
+                ORDER BY u.id ASC
+            `;
             conexion.query(sql, (err, resultados) => {
                 if (err) reject(err);
                 else resolve(resultados);
@@ -22,86 +46,81 @@ module.exports = {
         });
     },
 
+    // Buscar usuario por ID o por nombre de usuario
     obtenerPorIdBusqueda(criterio) {
         return new Promise((resolve, reject) => {
-            const sql = `SELECT id, primer_nombre AS primerNombre, segundo_nombre AS segundoNombre, primer_apellido AS primerApellido, segundo_apellido AS segundoApellido, cedula, area, estado FROM usuarios WHERE id = ? OR cedula = ?`;
+            const sql = `
+                SELECT id, usuario, rol, subregion_id, centro_salud_id
+                FROM usuarios
+                WHERE id = ? OR usuario = ?
+            `;
             conexion.query(sql, [criterio, criterio], (err, resultados) => {
                 if (err) reject(err);
-                else resolve(resultados[0]); // Retorna el primer resultado coincidente
+                else resolve(resultados[0]);
             });
         });
     },
 
-    actualizar(id, primerNombre, segundoNombre, primerApellido, segundoApellido, cedula, area, estado) {
+    // Actualizar datos de un usuario existente
+    actualizar(id, usuario, rol, subregionId = null, centroSaludId = null) {
         return new Promise((resolve, reject) => {
-            const sql = `UPDATE usuarios SET primer_nombre = ?, segundo_nombre = ?, primer_apellido = ?, segundo_apellido = ?, cedula = ?, area = ?, estado = ? WHERE id = ?`;
-            conexion.query(sql, [primerNombre, segundoNombre, primerApellido, segundoApellido, cedula, area, estado, id], (err) => {
+            const sql = `
+                UPDATE usuarios
+                SET usuario = ?, rol = ?, subregion_id = ?, centro_salud_id = ?
+                WHERE id = ?
+            `;
+            conexion.query(
+                sql,
+                [usuario, rol, subregionId || null, centroSaludId || null, id],
+                (err) => {
+                    if (err) reject(err);
+                    else resolve();
+                }
+            );
+        });
+    },
+
+    // Transferir usuario a otra subregión, centro o rol
+    transferir(id, nuevoRol, nuevaSubregionId = null, nuevoCentroSaludId = null) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                UPDATE usuarios
+                SET rol = ?, subregion_id = ?, centro_salud_id = ?
+                WHERE id = ?
+            `;
+            conexion.query(
+                sql,
+                [nuevoRol, nuevaSubregionId || null, nuevoCentroSaludId || null, id],
+                (err, resultados) => {
+                    if (err) reject(err);
+                    else resolve(resultados.affectedRows);
+                }
+            );
+        });
+    },
+
+    // Eliminar usuario por ID
+    eliminar(id) {
+        return new Promise((resolve, reject) => {
+            conexion.query(`DELETE FROM usuarios WHERE id = ?`, [id], (err) => {
                 if (err) reject(err);
                 else resolve();
             });
         });
     },
 
-    transferir(primerNombre, segundoNombre, primerApellido, segundoApellido, origen, destino) {
+    // Registrar movimiento en la tabla 'bitacora' real
+    registrarBitacora(usuarioId, usuarioNombre, accion) {
         return new Promise((resolve, reject) => {
-            const sql = `UPDATE usuarios SET area = ? WHERE primer_nombre = ? AND segundo_nombre = ? AND primer_apellido = ? AND segundo_apellido = ? AND area = ?`;
-            conexion.query(sql, [destino, primerNombre, segundoNombre, primerApellido, segundoApellido, origen], (err, resultados) => {
-                if (err) reject(err);
-                else resolve(resultados.affectedRows);
-            });
-        });
-    },
-
-    registrarBitacora(usuario, accion) {
-        return new Promise((resolve, reject) => {
-            const fecha = new Date().toISOString().slice(0, 19).replace('T', ' ');
-            const sql = `INSERT INTO bitacora (fecha, usuario, accion) VALUES (?, ?, ?)`;
-            conexion.query(sql, [fecha, usuario, accion], (err, resultados) => {
+            const sql = `
+                INSERT INTO bitacora (usuario_id, usuario_nombre, accion)
+                VALUES (?, ?, ?)
+            `;
+            conexion.query(sql, [usuarioId || null, usuarioNombre, accion], (err, resultados) => {
                 if (err) reject(err);
                 else resolve(resultados.insertId);
             });
         });
-    },
-   obtenerEvaluadorPorColegiado(nroColegiado) {
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, colegiado, especialidad FROM usuarios_evaluadores WHERE colegiado = ?`;
-            conexion.query(sql, [nroColegiado], (err, resultados) => {
-                if (err) reject(err);
-                else resolve(resultados[0]); 
-            });
-        });
-    },
-
-    insertarEvaluador(primerNombre, segundoNombre, primerApellido, segundoApellido, colegiado, especialidad, region) {
-        return new Promise((resolve, reject) => {
-            const sql = `INSERT INTO usuarios_evaluadores (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, colegiado, especialidad, region) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-            conexion.query(sql, [primerNombre, segundoNombre, primerApellido, segundoApellido, colegiado, especialidad, region], (err, resultados) => {
-                if (err) reject(err);
-                else resolve(resultados.insertId);
-            });
-        });
-    },
-
-    obtenerTodosEvaluadores() {
-        return new Promise((resolve, reject) => {
-            const sql = `SELECT id, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, colegiado, especialidad FROM usuarios_evaluadores`;
-            conexion.query(sql, (err, resultados) => {
-                if (err) reject(err);
-                else resolve(resultados);
-            });
-        });
-    },
-
-    actualizarEvaluador(id, primerNombre, segundoNombre, primerApellido, segundoApellido, colegiado, especialidad) {
-        return new Promise((resolve, reject) => {
-            const sql = `UPDATE usuarios_evaluadores SET primer_nombre = ?, segundo_nombre = ?, primer_apellido = ?, segundo_apellido = ?, colegiado = ?, especialidad = ? WHERE id = ?`;
-            conexion.query(sql, [primerNombre, segundoNombre, primerApellido, segundoApellido, colegiado, especialidad, id], (err) => {
-                if (err) reject(err);
-                else resolve();
-            });
-        });
-    },
-
-
+    }
 
 };

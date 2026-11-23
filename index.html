@@ -43,38 +43,35 @@
                             <h2 id="login-title" style="font-size: 1.6rem; font-weight: 700;">Master</h2>
                         </div>
 
-                        <form id="login" novalidate> <!--meti validaciones-->
+<form id="login" action="/login" method="POST" novalidate>
+    <input type="hidden" id="rol" name="rol" value="master">
+
                             <div class="mb-3" id="group-usuario">
                                 <label for="usuario" class="form-label" id="label-usuario">Usuario Administrador</label>
-                                <input type="text" id="usuario" class="form-control" placeholder="Ingrese código Master" required>
+                                <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Ingrese código Master" required>
                                 <span class="error-msg" id="error-usuario" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
                             </div>
 
                             <div class="mb-3 d-none" id="group-region">
                                 <label for="region" class="form-label">Código Regional</label>
-                                <!-- Esto es para que quede tojo junto al metetr el codigo -->
-                                <input type="text" id="region" class="form-control" placeholder="Ej: REG-ARAGUA" pattern="^REG-[A-Za-z0-9]+$">
+                                <input type="text" id="region" name="codigo_region" class="form-control" placeholder="Ej: REG-ARAGUA" pattern="^REG-[A-Za-z0-9]+$">
                                 <span class="error-msg" id="error-region" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
                             </div>
 
                             <div class="mb-3 d-none" id="group-centro">
                                 <label for="centro" class="form-label">ID del Centro Médico</label>
-                                <!--Lo mismo que el de arriba -->
-                                <input type="text" id="centro" class="form-control" placeholder="Ej: HOSP-021" pattern="^HOSP-[0-9]+$">
+                                <input type="text" id="centro" name="id_centro" class="form-control" placeholder="Ej: HOSP-021" pattern="^HOSP-[0-9]+$">
                                 <span class="error-msg" id="error-centro" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
                             </div>
 
                             <div class="mb-4">
                                 <label for="contraseña" class="form-label">Contraseña</label>
-                                <input type="password" id="contraseña" class="form-control" placeholder="Ingrese su contraseña" minlength="6" required>
+                                <input type="password" id="contraseña" name="contrasena" class="form-control" placeholder="Ingrese su contraseña" minlength="6" required>
                                 <span class="error-msg" id="error-contraseña" style="color: #ff6b6b; font-size: 0.8rem; display: none; margin-top: 4px;"></span>
                             </div>
 
                             <button type="submit" class="btn-submit">Iniciar Sesión</button>
 
-                            <div class="register-redirect">
-                                <a href="recuperar.html" style="color: #ff6b6b; font-weight: 600;">¿Olvidaste tu contraseña?</a>
-                            </div>
                         </form>
                     </div>
                     <!--la tarjeta del login bien acomodada a la derecha-->

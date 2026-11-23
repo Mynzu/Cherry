@@ -2,16 +2,27 @@ const conexion = require("../conexion");
 
 module.exports = {
     // Registrar una nueva acción en la bitácora
-    insertar(fecha, usuario, accion) {
+    insertar(usuarioId, usuarioNombre, accion, fecha = null) {
         return new Promise((resolve, reject) => {
-            conexion.query(
-                `INSERT INTO bitacora (fecha, usuario, accion) VALUES (?, ?, ?)`,
-                [fecha, usuario, accion],
-                (err, resultados) => {
-                    if (err) reject(err);
-                    else resolve(resultados.insertId);
-                }
-            );
+            if (fecha) {
+                conexion.query(
+                    `INSERT INTO bitacora (usuario_id, usuario_nombre, accion, fecha) VALUES (?, ?, ?, ?)`,
+                    [usuarioId || null, usuarioNombre, accion, fecha],
+                    (err, resultados) => {
+                        if (err) reject(err);
+                        else resolve(resultados.insertId);
+                    }
+                );
+            } else {
+                conexion.query(
+                    `INSERT INTO bitacora (usuario_id, usuario_nombre, accion) VALUES (?, ?, ?)`,
+                    [usuarioId || null, usuarioNombre, accion],
+                    (err, resultados) => {
+                        if (err) reject(err);
+                        else resolve(resultados.insertId);
+                    }
+                );
+            }
         });
     },
 
@@ -19,7 +30,7 @@ module.exports = {
     obtener() {
         return new Promise((resolve, reject) => {
             conexion.query(
-                `SELECT id, fecha, usuario, accion FROM bitacora ORDER BY id DESC`,
+                `SELECT id, usuario_id, usuario_nombre, accion, fecha FROM bitacora ORDER BY id DESC`,
                 (err, resultados) => {
                     if (err) reject(err);
                     else resolve(resultados);

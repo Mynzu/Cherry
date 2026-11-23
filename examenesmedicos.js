@@ -1,13 +1,13 @@
 const conexion = require("../conexion");
 
 module.exports = {
-    // Registrar o actualizar los exámenes médicos de una persona
-    guardarEvaluacion(personaId, tipoExamen, estatus, emisor, colegiado, observaciones) {
+    // Registrar examen de salud de una persona en examenes_salud
+    guardarEvaluacion(personaId, tipoExamen, estatus, especialista, observaciones = "", usuarioRegistra = null) {
         return new Promise((resolve, reject) => {
             conexion.query(
-                `INSERT INTO examenes_medicos (persona_id, tipo_examen, estatus, emisor, colegiado, observaciones) 
+                `INSERT INTO examenes_salud (persona_id, tipo_examen, estatus, especialista, observaciones, usuario_registra) 
                  VALUES (?, ?, ?, ?, ?, ?)`,
-                [personaId, tipoExamen, estatus, emisor, colegiado, observaciones],
+                [personaId, tipoExamen, estatus, especialista, observaciones, usuarioRegistra || null],
                 (err, resultados) => {
                     if (err) reject(err);
                     else resolve(resultados.insertId);
@@ -16,11 +16,14 @@ module.exports = {
         });
     },
 
-    // Obtener el historial de exámenes médicos de una persona específica
+    // Obtener el historial de exámenes de salud de una persona específica
     obtenerPorPersonaId(personaId) {
         return new Promise((resolve, reject) => {
             conexion.query(
-                `SELECT id, tipo_examen, estatus, emisor, colegiado, observaciones FROM examenes_medicos WHERE persona_id = ?`,
+                `SELECT id, persona_id, tipo_examen, estatus, especialista, observaciones, usuario_registra 
+                 FROM examenes_salud 
+                 WHERE persona_id = ? 
+                 ORDER BY id DESC`,
                 [personaId],
                 (err, resultados) => {
                     if (err) reject(err);

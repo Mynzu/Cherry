@@ -25,62 +25,40 @@
                     <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">Ingrese sus datos personales para verificar</p>
                 </div>
 
-                <form id="form-consulta-publica">
-                    <!-- Primer y Segundo Nombre -->
-                    <div class="form-row-grid">
-                        <div>
-                            <label for="primerNombre" class="form-label">Primer Nombre</label>
-                            <input type="text" id="primerNombre" class="form-control" placeholder="Ej: Albert" required>
-                        </div>
-                        <div>
-                            <label for="segundoNombre" class="form-label">Segundo Nombre</label>
-                            <input type="text" id="segundoNombre" class="form-control" placeholder="Ej: jose" required>
-                        </div>
+                <form id="form-consulta-publica" action="/personas/consultar-expediente" method="POST">
+                <!-- Primer y Segundo Nombre -->
+                <div class="form-row-grid">
+                    <div>
+                        <label for="primerNombre" class="form-label">Primer Nombre</label>
+                        <input type="text" id="primerNombre" name="primer_nombre" class="form-control" placeholder="Ej: Albert" required>
                     </div>
-
-                    <!-- Primer y Segundo Apellido -->
-                    <div class="form-row-grid">
-                        <div>
-                            <label for="primerApellido" class="form-label">Primer Apellido</label>
-                            <input type="text" id="primerApellido" class="form-control" placeholder="Ej: Blanco" required>
-                        </div>
-                        <div>
-                            <label for="segundoApellido" class="form-label">Segundo Apellido</label>
-                            <input type="text" id="segundoApellido" class="form-control" placeholder="Ej: Cordova" required>
-                        </div>
+                    <div>
+                        <label for="segundoNombre" class="form-label">Segundo Nombre</label>
+                        <input type="text" id="segundoNombre" name="segundo_nombre" class="form-control" placeholder="Ej: Jose">
                     </div>
-
-                    <!-- Cédula -->
-                    <div class="mb-4">
-                        <label for="cedula" class="form-label">Cédula de Identidad</label>
-                        <input type="text" id="cedula" class="form-control" placeholder="Ej: V-32128027" required>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Consultar Estado</button>
-                    <a href="index.html" class="btn-submit" style="display: block; text-align: center; text-decoration: none; background-color: rgba(255,255,255,0.15); margin-bottom: 0;">Volver al Inicio</a>
-                </form>
-
-                <!-- Ficha del Resultado -->
-                <div id="resultado-card" class="result-card">
-                    <h3>Expediente Clínico de Vacunación</h3>
-                    
-                    <div style="margin-bottom: 12px; font-size: 0.92rem; border-bottom: 1px dashed rgba(255,255,255,0.15); padding-bottom: 8px;">
-                        <div><strong>Paciente:</strong> <span id="res-nombre-completo" style="color: #90e0ef;"></span></div>
-                        <div><strong>Cédula:</strong> <span id="res-cedula"></span></div>
-                    </div>
-
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <strong style="color: #38bdf8;">Historial Completo de Vacunas:</strong>
-                        <span id="res-total-vacunas" style="background: #0d6efd; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;"></span>
-                    </div>
-
-                    <div id="lista-vacunas-container" class="vaccines-scroll-list"></div>
                 </div>
 
-                <!-- Mensaje de Error / Coincidencia Fallida -->
-                <div id="error-card" class="error-card">
-                     <span id="error-texto">No se encontraron registros de vacunación asociados a esta cédula.</span>
+                <!-- Primer y Segundo Apellido -->
+                <div class="form-row-grid">
+                    <div>
+                        <label for="primerApellido" class="form-label">Primer Apellido</label>
+                        <input type="text" id="primerApellido" name="primer_apellido" class="form-control" placeholder="Ej: Blanco" required>
+                    </div>
+                    <div>
+                        <label for="segundoApellido" class="form-label">Segundo Apellido</label>
+                        <input type="text" id="segundoApellido" name="segundo_apellido" class="form-control" placeholder="Ej: Cordova">
+                    </div>
                 </div>
+
+                <!-- Cédula -->
+                <div class="mb-4">
+                    <label for="cedula" class="form-label">Cédula de Identidad</label>
+                    <input type="text" id="cedula" name="cedula" class="form-control" placeholder="Ej: V-32128027" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Consultar Estado</button>
+                <a href="/" class="btn-submit" style="display: block; text-align: center; text-decoration: none; background-color: rgba(255,255,255,0.15); margin-bottom: 0;">Volver al Inicio</a>
+            </form>
 
             </div>
         </div>
